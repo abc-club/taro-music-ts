@@ -94,7 +94,8 @@ class Index extends Component {
   render () {
     return (
       <View className='index'>
-        <Button className='add_btn' onClick={this.props.add2.bind(this, {num: 10})}>+</Button>
+        <Button className='add_btn' onClick={this.props.add}>+</Button>
+        <Button className='add_btn' onClick={this.props.add2.bind(this, {num: 10})}>+10</Button>
         <Button className='dec_btn' onClick={this.props.dec}>-</Button>
         <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
         <View><Text>{this.props.counter.num}</Text></View>
