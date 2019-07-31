@@ -7,6 +7,7 @@ import models from './models/index'
 import Index from './pages/index'
 
 import './app.scss'
+import './assets/fonts/iconfont.css'
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -32,13 +33,41 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/my/index',
+      'pages/account/index',
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#7A7E83',
+      selectedColor: '#ab3319',
+      borderStyle: 'black',
+      backgroundColor: '#ffffff',
+      list: [
+        {
+          text: '发现',
+          pagePath: 'pages/index/index',
+          iconPath: 'assets/images/icon_API.png',
+          selectedIconPath: 'assets/images/icon_API_HL.png',
+        },
+        {
+          text: '我的',
+          pagePath: 'pages/my/index',
+          iconPath: 'assets/images/icon_component.png',
+          selectedIconPath: 'assets/images/icon_component_HL.png',
+        },
+        {
+          text: '账号',
+          pagePath: 'pages/account/index',
+          iconPath: 'assets/images/icon_component.png',
+          selectedIconPath: 'assets/images/icon_component_HL.png',
+        }
+      ]
     }
   }
 
