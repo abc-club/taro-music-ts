@@ -1,7 +1,8 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View, Button, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
+import { AtButton, AtList, AtListItem, AtFloatLayout, } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
 import { getRecommendList } from './service'
@@ -32,13 +33,13 @@ type PageDispatchProps = {
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  show: boolean
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
-  props: IProps;
-}
+
 
 @connect(({ counter }) => ({
   counter
@@ -68,17 +69,24 @@ interface Index {
     })
   }
 }))
-class Index extends Component {
+class Index extends Component<IProps, PageState> {
 
-    /**
+  /**
    * 指定config的类型声明为: Taro.Config
    *
    * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
-    config: Config = {
-    navigationBarTitleText: '首页'
+  */
+  config: Config = {
+    navigationBarTitleText: '账号'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      show: false
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -97,15 +105,95 @@ class Index extends Component {
 
   componentDidHide () { }
 
+  goLogin() {
+    this.setState({
+      show: false
+    })
+    Taro.redirectTo({
+      url: '/pages/login/index'
+    })
+  }
+
+  goRegister() {
+    this.setState({
+      show: false
+    })
+    Taro.redirectTo({
+      url: '/pages/register/index'
+    })
+  }
+
+
+  handleShow() {
+    this.setState({
+      show: true
+    })
+  }
+
+  handleClose() {
+    this.setState({
+      show: false
+    })
+  }
   render () {
+    let { show } = this.state
+
     return (
-      <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='add_btn' onClick={this.props.add2.bind(this, {num: 10})}>+10</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+      <View className='root'>
+        <View className='wrapper login_wrapper'>
+          <View className='login_wrapper_text'><Text>登录网易云音乐</Text></View>
+          <View className='login_wrapper_text'><Text>手机电脑多端同步，尽享海量高品质音乐</Text></View>
+          <View className='login_wrapper_btn'>
+            <AtButton type='secondary' circle onClick={this.handleShow.bind(this)}>立即登录</AtButton>
+          </View>
+        </View>
+
+        <View className='wrapper'>
+          <AtList hasBorder={false}>
+            <AtListItem
+              hasBorder={false}
+              title='标题文字'
+              arrow='right'
+              thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+            />
+          </AtList>
+        </View>
+
+        <View className='wrapper'>
+          <AtList hasBorder={false}>
+            <AtListItem
+              title='标题文字'
+              arrow='right'
+              iconInfo={{value: 'iconfont icon-xinfeng', size: 16}}
+            />
+            <AtListItem
+              title='标题文字'
+              arrow='right'
+              thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+            />
+            <AtListItem
+              title='标题文字'
+              arrow='right'
+              thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+            />
+          </AtList>
+        </View>
+
+        <AtFloatLayout isOpened={show} onClose={this.handleClose.bind(this)}>
+          <View className='iconfont icon-baseline-close-px icon-close' onClick={this.handleClose.bind(this)}></View>
+          <View className='layout_img_wrapper'>
+            <Image
+              className='layout_img'
+              src='https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3215804841,2810938819&fm=58&bpow=1024&bpoh=1024'
+            />
+          </View>
+          <View className='form_btn'>
+            <AtButton type='secondary' circle onClick={this.goLogin.bind(this)}>手机号登录</AtButton>
+          </View>
+          <View className='form_btn'>
+            <AtButton type='secondary' circle onClick={this.goRegister.bind(this)}>注册</AtButton>
+          </View>
+        </AtFloatLayout>
       </View>
     )
   }
@@ -118,4 +206,4 @@ class Index extends Component {
 //
 // #endregion
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+export default Index

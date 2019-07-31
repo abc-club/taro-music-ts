@@ -1,0 +1,52 @@
+@import '../../assets/styles/theme.scss';
+.root {
+  background-color: $bg-color;
+  .wrapper{
+    background-color: $bg-color-sub;
+    margin-bottom: $h-spacing-20;
+  }
+
+  .login_wrapper{
+    padding: $h-spacing-20;
+    font-size: $font-size-28;
+    color: $color-font;
+    .login_wrapper_text{
+      text-align: center;
+    }
+    .login_wrapper_btn{
+      margin: $v-spacing-20 0;
+      .at-button{
+        border-color: $color-font-sub !important;
+        color: $color-font !important;
+        font-size: $font-size-34;
+      }
+    }
+  }
+
+  .at-float-layout__container{
+    height: 100%;
+    max-height: 100%;
+  }
+  .at-float-layout .layout-body__content {
+    height: 100%;
+    max-height: 100%;
+    .icon-close{
+      font-size: $font-size-48;
+    }
+    .layout_img_wrapper{
+      text-align: center;
+      .layout_img{
+        width: 80px;
+        height: 80px;
+      }
+    }
+    .form_btn{
+      margin: $v-spacing-30 $v-spacing-20;
+      .at-button{
+        border-color: $brand-color !important;
+        color: $brand-color !important;
+        font-size: $font-size-34;
+      }
+    }
+  }
+}

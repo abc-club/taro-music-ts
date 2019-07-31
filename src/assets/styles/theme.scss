@@ -1,1 +1,65 @@
-$brand_color: #ca4d3f;
+$hd: 2px; // 基本单位
+
+$brand-color: #ca4d3f;
+$bg-color: #eeeff1;
+$bg-color-sub: #fff;
+$color-font: #414141;
+$color-font-sub: #e1e1e1;
+
+
+$font-size-14: 7 * $hd;
+$font-size-16: 8 * $hd;
+$font-size-20: 10 * $hd;
+$font-size-22: 11 * $hd;
+$font-size-24: 12 * $hd;
+$font-size-26: 13 * $hd;
+$font-size-28: 14 * $hd;
+$font-size-30: 15 * $hd;
+$font-size-34: 17 * $hd;
+$font-size-36: 18 * $hd;
+$font-size-48: 24 * $hd;
+$font-size-70: 35 * $hd;
+
+// 水平间距
+$h-spacing-4: 2 * $hd;
+$h-spacing-10: 5 * $hd;
+$h-spacing-16: 8 * $hd;
+$h-spacing-20: 10 * $hd;
+$h-spacing-30: 15 * $hd;
+$h-spacing-40: 20 * $hd;
+$h-spacing-50: 25 * $hd;
+$h-spacing-60: 30 * $hd;
+$h-spacing-80: 40 * $hd;
+
+// 垂直间距
+$v-spacing-4: 2 * $hd;
+$v-spacing-10: 5 * $hd;
+$v-spacing-12: 6 * $hd;
+$v-spacing-20: 10 * $hd;
+$v-spacing-24: 12 * $hd;
+$v-spacing-30: 15 * $hd;
+$v-spacing-48: 24 * $hd;
+$v-spacing-100: 50 * $hd;
+// 圆角
+$radius-4: 2 * $hd;
+$radius-8: 4 * $hd;
+$radius-12: 6 * $hd;
+$radius-16: 8 * $hd;
+$radius-24: 12 * $hd;
+$radius-circle: 50%;
+
+$icon-size-30: 15 * $hd;
+$icon-size-36: 18 * $hd;
+$icon-size-40: 20 * $hd;
+$icon-size-44: 22 * $hd;
+$icon-size-72: 36 * $hd;
+
+$border-width-6: 3 * $hd;
+
+// 字体类型
+$font-family-PingFang-SC: PingFangSC;
+$font-family-PingFang-RG: PingFangSC-Regular;
+
+$font-weight-600: 600;
+
+

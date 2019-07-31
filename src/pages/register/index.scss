@@ -1,0 +1,29 @@
+@import '../../assets/styles/theme.scss';
+.root {
+  background-color: $bg-color;
+  .at-form::after{
+    border-bottom-width: 0 !important;
+  }
+  .wrapper{
+    background-color: $bg-color-sub;
+    margin-bottom: $h-spacing-20;
+  }
+  .form_btn{
+    padding: $h-spacing-20;
+    margin: $v-spacing-20 0;
+    .at-button{
+      border-color: $color-font-sub !important;
+      color: #fff !important;
+      font-size: $font-size-34;
+      background-color: $brand-color;
+    }
+  }
+  .form_reset{
+    margin-top: $h-spacing-20;
+    text-align: center;
+    .form_reset_text{
+      font-size: $font-size-20;
+      text-decoration: underline;
+    }
+  }
+}
