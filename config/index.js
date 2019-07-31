@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-commonjs
+const path = require('path')
+
 const config = {
   projectName: 'taro-music-ts',
   date: '2019-7-30',
@@ -90,7 +93,11 @@ const config = {
           }
         }
       }
-    }
+    },
+    esnextModules: ['taro-ui']
+  },
+  alias: {
+    '@': path.resolve(__dirname, '..', 'src')
   }
 }
 

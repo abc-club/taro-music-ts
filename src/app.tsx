@@ -6,6 +6,7 @@ import dva from './dva'
 import models from './models/index'
 import Index from './pages/index'
 
+import 'taro-ui/dist/style/index.scss'
 import './app.scss'
 import './assets/fonts/iconfont.css'
 

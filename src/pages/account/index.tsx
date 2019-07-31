@@ -4,7 +4,7 @@ import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-
+import { getRecommendList } from './service'
 import './index.scss'
 
 // #region 书写注意
@@ -83,6 +83,12 @@ class Index extends Component {
 
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
+  }
+
+  componentDidMount() {
+    getRecommendList().then(res => {
+      console.log(res)
+    })
   }
 
   componentWillUnmount () { }
