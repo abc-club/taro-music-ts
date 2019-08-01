@@ -5,6 +5,7 @@ import { Provider } from '@tarojs/redux'
 import dva from './dva'
 import models from './models/index'
 import Index from './pages/index'
+import '@/utils/moment'
 
 import 'taro-ui/dist/style/index.scss'
 import './app.scss'
@@ -15,6 +16,7 @@ import './assets/fonts/iconfont.css'
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
 //   require('nerv-devtools')
 // }
+
 
 const dvaApp = dva.createApp({
   initialState: {},
@@ -34,9 +36,12 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/myEvents/index',
       'pages/account/index',
       'pages/index/index',
       'pages/my/index',
+      'pages/myFans/index',
+      'pages/myFocus/index',
       'pages/login/index',
       'pages/register/index',
     ],

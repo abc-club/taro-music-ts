@@ -2,10 +2,10 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtButton, AtList, AtListItem, AtFloatLayout, } from 'taro-ui'
+import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import { getRecommendList } from './service'
+import { getUserDetailDao, doDailySigninDao } from './service'
 import './index.scss'
 
 // #region 书写注意
@@ -35,6 +35,23 @@ type PageOwnProps = {}
 
 type PageState = {
   show: boolean
+  userInfo: {
+    account: {
+      id: number
+    },
+    profile: {
+      avatarUrl: string,
+      backgroundUrl: string,
+      nickname: string,
+      eventCount: number,
+      follows: number,
+      followeds: number
+    }
+  }
+  userDetail: {
+    userLevel?: number
+    dailySignin?: boolean,
+  }
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -85,7 +102,9 @@ class Index extends Component<IProps, PageState> {
   constructor(props) {
     super(props)
     this.state = {
-      show: false
+      show: false,
+      userInfo: Taro.getStorageSync('userInfo'),
+      userDetail: {},
     }
   }
 
@@ -94,35 +113,29 @@ class Index extends Component<IProps, PageState> {
   }
 
   componentDidMount() {
-    getRecommendList().then(res => {
-      console.log(res)
-    })
+
   }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    this.setState({
+      userInfo: Taro.getStorageSync('userInfo')
+    })
+    if (!this.state.userInfo) return
+    this.getUserDetail()
+  }
 
   componentDidHide () { }
 
-  goLogin() {
+  jumpPage(name) {
     this.setState({
       show: false
     })
     Taro.navigateTo({
-      url: '/pages/login/index'
+      url: `/pages/${name}/index`
     })
   }
-
-  goRegister() {
-    this.setState({
-      show: false
-    })
-    Taro.navigateTo({
-      url: '/pages/register/index'
-    })
-  }
-
 
   handleShow() {
     this.setState({
@@ -135,18 +148,100 @@ class Index extends Component<IProps, PageState> {
       show: false
     })
   }
+
+  getUserDetail() {
+    const { id } = this.state.userInfo.account
+    getUserDetailDao(id).then((res) => {
+      this.setState({
+        userDetail: { ... this.state.userDetail, ...{
+          userLevel: res.level,
+          dailySignin: res.mobileSign || res.pcSign
+        }},
+        userInfo: {
+          ...this.state.userInfo,
+          ... {
+            profile: res.profile
+          }
+        }
+      })
+    })
+  }
+
+  // 签到
+  doDailySignin() {
+    doDailySigninDao().then(res => {
+      console.log(res)
+    })
+  }
+
+  showToast() {
+    Taro.showToast({
+      title: '暂未实现，敬请期待',
+      icon: 'none'
+    })
+  }
+
   render () {
-    let { show } = this.state
+    const { show, userInfo, userDetail, } = this.state
 
     return (
       <View className='root'>
-        <View className='wrapper login_wrapper'>
-          <View className='login_wrapper_text'><Text>登录网易云音乐</Text></View>
-          <View className='login_wrapper_text'><Text>手机电脑多端同步，尽享海量高品质音乐</Text></View>
-          <View className='login_wrapper_btn'>
-            <AtButton type='secondary' circle onClick={this.handleShow.bind(this)}>立即登录</AtButton>
-          </View>
-        </View>
+        {
+          !userInfo && (
+            <View className='wrapper login_wrapper'>
+              <View className='login_wrapper_text'><Text>登录网易云音乐</Text></View>
+              <View className='login_wrapper_text'><Text>手机电脑多端同步，尽享海量高品质音乐</Text></View>
+              <View className='login_wrapper_btn'>
+                <AtButton type='secondary' circle onClick={this.handleShow.bind(this)}>立即登录</AtButton>
+              </View>
+            </View>
+          )
+        }
+        {
+          userInfo && (
+            <View className='wrapper profile_wrapper'>
+              <View className='header'>
+                <AtAvatar circle image={userInfo.profile.avatarUrl}></AtAvatar>
+                <View className='header__info'>
+                  <Text className='header__info__name'>{userInfo.profile.nickname}</Text>
+                  <AtTag size='small' circle>LV.{userDetail.userLevel}</AtTag>
+                </View>
+                {
+                  !userDetail.dailySignin && (
+                    <View className='header__checkin' onClick={this.doDailySignin.bind(this)}>
+                    签到<View className='icon iconfont icon-jiantou'></View>
+                    </View>
+                  )
+                }
+                {
+                  userDetail.dailySignin && (
+                    <View className='header__checkin'>
+                      已签到
+                    </View>
+                  )
+                }
+              </View>
+              <View className='user_count'>
+                <View className='user_count__sub border_right_1px' onClick={this.jumpPage.bind(this, 'myEvents')}>
+                  <Text className='profile_wrapper_follow_item_title'>动态</Text>
+                  <Text className='user_count__sub--num'>{userInfo.profile.eventCount}</Text>
+                </View>
+                <View className='user_count__sub border_right_1px' onClick={this.jumpPage.bind(this, 'myFocus')}>
+                  <Text className='profile_wrapper_follow_item_title'>关注</Text>
+                  <Text className='user_count__sub--num'>{userInfo.profile.follows}</Text>
+                </View>
+                <View className='user_count__sub border_right_1px' onClick={this.jumpPage.bind(this, 'myFans')}>
+                  <Text className='profile_wrapper_follow_item_title'>粉丝</Text>
+                  <Text className='user_count__sub--num'>{userInfo.profile.followeds}</Text>
+                </View>
+                <View className='user_count__sub' onClick={this.showToast.bind(this)}>
+                  <View className='icon iconfont icon-pan_icon'></View>
+                  <Text className='profile_wrapper_follow_item_title'>我的资料</Text>
+                </View>
+              </View>
+            </View>
+          )
+        }
 
         <View className='wrapper'>
           <AtList hasBorder={false}>
@@ -184,14 +279,14 @@ class Index extends Component<IProps, PageState> {
           <View className='layout_img_wrapper'>
             <Image
               className='layout_img'
-              src='https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3215804841,2810938819&fm=58&bpow=1024&bpoh=1024'
+              src={require('@/assets/images/cloudmusic.jpeg')}
             />
           </View>
           <View className='form_btn'>
-            <AtButton type='secondary' circle onClick={this.goLogin.bind(this)}>手机号登录</AtButton>
+            <AtButton type='secondary' circle onClick={this.jumpPage.bind(this, 'login')}>手机号登录</AtButton>
           </View>
           <View className='form_btn'>
-            <AtButton type='secondary' circle onClick={this.goRegister.bind(this)}>注册</AtButton>
+            <AtButton type='secondary' circle onClick={this.jumpPage.bind(this, 'register')}>注册</AtButton>
           </View>
         </AtFloatLayout>
       </View>

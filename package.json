@@ -34,6 +34,7 @@
     "dva-core": "^1.4.0",
     "dva-loading": "^3.0.12",
     "dva-model-extend": "^0.1.2",
+    "moment": "^2.24.0",
     "nerv-devtools": "^1.4.0-beta.5",
     "nervjs": "^1.4.0-beta.5",
     "redux": "^4.0.0",

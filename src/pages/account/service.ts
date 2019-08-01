@@ -1,8 +1,18 @@
 import API from '@/services/api'
 
-// 获取推荐歌单
-export function getRecommendList() {
+// 获取用户信息
+export function getUserDetailDao(uid: number) {
   return API.get({
-    url: '/personalized'
+    url: '/user/detail',
+    data: {
+      uid
+    }
+  })
+}
+
+// 签到
+export function doDailySigninDao() {
+  return API.get({
+    url: '/daily_signin',
   })
 }

@@ -22,7 +22,69 @@
       }
     }
   }
-
+  .header{
+    display: flex;
+    align-items: center;
+    padding:$h-spacing-20;
+    .header__info{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding:$h-spacing-20;
+      .header__info__name{
+        font-size: 36px;
+        margin-bottom: $h-spacing-10;
+      }
+    }
+    .header__checkin{
+      display: flex;
+      padding: 0 20px;
+      height: 50px;
+      color: #666;
+      font-size: 24px;
+      text-align: center;
+      line-height: 48px;
+      vertical-align: middle;
+      border: 1PX solid #f7f7f7;
+      box-sizing: border-box;
+      border-radius: $radius-30;
+      background-clip: border-box;
+      overflow: hidden;
+      .icon-jiantou{
+        font-size: 24px;
+        color: #666;
+      }
+    }
+  }
+  .user_count {
+    display: flex;
+    text-align: center;
+    padding: $h-spacing-20 0;
+    border-top-width: 1PX;
+    border-top-color: $bg-color;
+    border-top-style: solid;
+    .border_right_1px {
+      border-right-width: 1PX;
+      border-right-color: $bg-color;
+      border-right-style: solid;
+    }
+    .user_count__sub {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      font-size: 22px;
+      color: #888888;
+      .icon-pan_icon{
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      .user_count__sub--num {
+        color: #323232;
+        font-size: 36px;
+        font-weight: 700;
+      }
+    }
+  }
   .at-float-layout__container{
     height: 100%;
     max-height: 100%;

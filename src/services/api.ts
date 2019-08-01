@@ -51,6 +51,7 @@ export default {
         url: `${BASE_URL}${url}`,
         header: {
           'content-type': 'application/x-www-form-urlencoded',
+          cookie: Taro.getStorageSync('cookies'),
           ...options.header
         },
       }).then(setCookie)
