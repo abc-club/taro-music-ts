@@ -16,3 +16,10 @@ export function doDailySigninDao() {
     url: '/daily_signin',
   })
 }
+
+// 登出
+export function doLogoutDao() {
+  return API.get({
+    url: '/logout',
+  })
+}

@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux'
 import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import { getUserDetailDao, doDailySigninDao } from './service'
+import { getUserDetailDao, doDailySigninDao, doLogoutDao, } from './service'
 import './index.scss'
 
 // #region 书写注意
@@ -167,6 +167,16 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
+  // 登出
+  logOut() {
+    Taro.clearStorage()
+    doLogoutDao()
+    this.setState({
+      show: true,
+      userInfo: Taro.getStorageSync('userInfo')
+    })
+  }
+
   // 签到
   doDailySignin() {
     doDailySigninDao().then(res => {
@@ -274,6 +284,9 @@ class Index extends Component<IProps, PageState> {
           </AtList>
         </View>
 
+        <View className='wrapper logout-wrapper'>
+          <Text onClick={this.logOut.bind(this)}>退出登录</Text>
+        </View>
         <AtFloatLayout isOpened={show} onClose={this.handleClose.bind(this)}>
           <View className='iconfont icon-baseline-close-px icon-close' onClick={this.handleClose.bind(this)}></View>
           <View className='layout_img_wrapper'>
