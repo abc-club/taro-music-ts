@@ -8,6 +8,16 @@
     background-color: $bg-color-sub;
     margin-bottom: $h-spacing-20;
   }
+  .login_content__item {
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    font-size: 32px;
+    .at-input{
+      width: 600px;
+      padding-left: 20px;
+    }
+  }
   .form_btn{
     padding: $h-spacing-20;
     margin: $v-spacing-20 0;

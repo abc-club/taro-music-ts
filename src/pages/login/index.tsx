@@ -2,10 +2,11 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtButton, AtInput, AtForm, } from 'taro-ui'
+import { AtIcon, AtButton, AtInput, AtForm, } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
 import { getRecommendList } from './service'
+import CTitle from '@/components/CTitle'
 import './index.scss'
 
 // #region 书写注意
@@ -115,27 +116,33 @@ class Index extends Component {
     let { cellphone, password, } = this.state
     return (
       <View className='root'>
+        <CTitle isFixed={false} />
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >
-          <AtInput
-            clear
-            name='cellphone'
-            title='手机号'
-            type='number'
-            placeholder='请输入手机号'
-            value={cellphone}
-            onChange={this.handleChange.bind(this)}
-          />
-          <AtInput
-            clear
-            name='password'
-            title='密码'
-            type='password'
-            placeholder='密码不能少于6位数'
-            value={password}
-            onChange={this.handleChange.bind(this)}
-          />
+          <View className='login_content__item'>
+            <AtIcon value='iphone' size='24' color='#ccc'></AtIcon>
+            <AtInput
+              clear
+              name='cellphone'
+              type='number'
+              placeholder='手机号'
+              value={cellphone}
+              onChange={this.handleChange.bind(this)}
+            />
+          </View>
+          <View className='login_content__item'>
+            <AtIcon value='lock' size='24' color='#ccc'></AtIcon>
+            <AtInput
+              clear
+              name='password'
+              type='password'
+              placeholder='密码'
+              value={password}
+              onChange={this.handleChange.bind(this)}
+            />
+          </View>
+
           <View className='form_btn'>
             <AtButton type='primary' circle formType='submit'>登录</AtButton>
           </View>

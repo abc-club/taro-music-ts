@@ -34,17 +34,17 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/login/index',
       'pages/account/index',
       'pages/index/index',
       'pages/my/index',
-      'pages/login/index',
       'pages/register/index',
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#d43c33',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'white'
     },
     tabBar: {
       color: '#7A7E83',
