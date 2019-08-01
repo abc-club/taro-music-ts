@@ -10,15 +10,15 @@ import {
  * @param response
  * @returns {*}
  */
-function checkHttpStatus(response: API.Response) {
+function checkHttpStatus(response: API.Response, resolve, reject) {
   if (response.statusCode >= 200 && response.statusCode < 300) {
-    return response.data
+    resolve(response.data)
+  } else {
+    const message = HTTP_ERROR[response.statusCode] || `ERROR CODE: ${response.statusCode}`
+    response.data.errorCode = response.statusCode
+    response.data.error = message
+    reject(response.data)
   }
-
-  const message = HTTP_ERROR[response.statusCode] || `ERROR CODE: ${response.statusCode}`
-  const error: any = new Error(message)
-  error.response = response
-  throw error
 }
 
 function setCookie(response: API.Response) {
@@ -40,41 +40,6 @@ function setCookie(response: API.Response) {
   return response
 }
 
-/**
- * 检查返回值是否正常
- * @param data
- * @returns {*}
- */
-function checkSuccess(data: any, resolve) {
-  if (data instanceof ArrayBuffer && typeof data === 'string') {
-    return data
-  }
-
-  if (
-    typeof data.code === 'number' &&
-    data.code === 200
-  ) {
-    return resolve(data)
-  }
-
-  const error: any = new Error(data.message || '服务端返回异常')
-  error.data = data
-  throw error
-}
-
-/**
- * 请求错误处理
- * @param error
- * @param reject
- */
-function throwError(error, reject) {
-  if (error.errMsg) {
-    reject('服务器正在维护中!')
-    throw new Error('服务器正在维护中!')
-  }
-  throw error
-}
-
 export default {
   request(options: any, method?: string) {
     const { url } = options
@@ -89,12 +54,8 @@ export default {
           ...options.header
         },
       }).then(setCookie)
-        .then(checkHttpStatus)
         .then((res) => {
-          checkSuccess(res, resolve)
-        })
-        .catch(error => {
-          throwError(error, reject)
+          checkHttpStatus(res, resolve, reject)
         })
     })
   },

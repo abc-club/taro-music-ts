@@ -1,11 +1,10 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
-import { AtIcon, AtButton, AtInput, AtForm, } from 'taro-ui'
+import { View, Text } from '@tarojs/components'
+import { AtIcon, AtButton, AtInput, AtForm, AtToast } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import { getRecommendList } from './service'
+import { LoginDao } from './service'
 import CTitle from '@/components/CTitle'
 import './index.scss'
 
@@ -42,34 +41,6 @@ interface Index {
   props: IProps;
 }
 
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch({
-      type: 'counter/ADD',
-      payload: {}
-    })
-  },
-  add2 (payload) {
-    dispatch({
-      type: 'counter/ADD2',
-      payload
-    })
-  },
-  dec () {
-    dispatch({
-      type: 'counter/MINUS',
-      payload: {}
-    })
-  },
-  asyncAdd () {
-    dispatch({
-      type: 'counter/asyncAdd',
-      payload: {}
-    })
-  }
-}))
 class Index extends Component {
 
   /**
@@ -84,8 +55,11 @@ class Index extends Component {
   }
 
   state = {
-    cellphone: '',
-    password: ''
+    phone: '',
+    password: '',
+    showLoading: false,
+    showTip: false,
+    tip: ''
   }
 
   componentWillReceiveProps (nextProps) {
@@ -93,9 +67,6 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    getRecommendList().then(res => {
-      console.log(res)
-    })
   }
 
   componentWillUnmount () { }
@@ -104,16 +75,74 @@ class Index extends Component {
 
   componentDidHide () { }
 
-  handleChange(e) {
-    console.log(e)
+  handleChange (type: 'phone' | 'password', value) {
+    if (type === 'phone') {
+        this.setState({
+            phone: value
+        })
+    } else {
+        this.setState({
+            password: value
+        })
+    }
   }
 
   onSubmit() {
-
+    const { phone, password } = this.state
+      if (!phone) {
+        this.setState({
+            showTip: true,
+            tip: '请输入手机号'
+        })
+        return
+      }
+      if (!password) {
+        this.setState({
+            showTip: true,
+            tip: '请输入密码'
+        })
+        return
+      }
+      this.setState({
+          showLoading: true
+      })
+      LoginDao(phone, password).then((res) => {
+          const { code } = res
+          let tip = '登录成功'
+          if (code !== 200) {
+            tip = res.msg || '登录失败'
+          }
+          this.setState({
+            showLoading: false,
+            showTip: true,
+            tip
+          })
+          if (code === 200) {
+            Taro.setStorageSync('userInfo', res)
+            Taro.setStorageSync('userId', res.account.id)
+            Taro.navigateBack()
+          }
+      }).catch(() => {
+        this.setState({
+          showLoading: false,
+          showTip: true,
+          tip: '登录失败'
+        })
+      })
   }
 
+  closeToast() {
+    this.setState({
+      showTip: false,
+    })
+  }
+  closeLoading() {
+    this.setState({
+      showLoading: false,
+    })
+  }
   render () {
-    let { cellphone, password, } = this.state
+    let { phone, password, showLoading, showTip, tip } = this.state
     return (
       <View className='root'>
         <CTitle isFixed={false} />
@@ -124,11 +153,11 @@ class Index extends Component {
             <AtIcon value='iphone' size='24' color='#ccc'></AtIcon>
             <AtInput
               clear
-              name='cellphone'
+              name='phone'
               type='number'
               placeholder='手机号'
-              value={cellphone}
-              onChange={this.handleChange.bind(this)}
+              value={phone}
+              onChange={(val) => this.handleChange('phone', val)}
             />
           </View>
           <View className='login_content__item'>
@@ -139,7 +168,7 @@ class Index extends Component {
               type='password'
               placeholder='密码'
               value={password}
-              onChange={this.handleChange.bind(this)}
+              onChange={(val) => this.handleChange('password', val)}
             />
           </View>
 
@@ -150,7 +179,8 @@ class Index extends Component {
             <Text className='form_reset_text'>重设密码</Text>
           </View>
         </AtForm>
-
+        <AtToast isOpened={showLoading} text='登录中' status='loading' hasMask duration={30000000} onClose={this.closeLoading.bind(this)}></AtToast>
+        <AtToast isOpened={showTip} text={tip} hasMask duration={2000} onClose={this.closeToast.bind(this)}></AtToast>
       </View>
     )
   }

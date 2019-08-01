@@ -34,10 +34,10 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/login/index',
       'pages/account/index',
       'pages/index/index',
       'pages/my/index',
+      'pages/login/index',
       'pages/register/index',
     ],
     window: {

@@ -1,11 +1,11 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
-import { AtButton, AtInput, AtForm, } from 'taro-ui'
+import { View, Text } from '@tarojs/components'
+import { AtIcon, AtButton, AtInput, AtForm, AtToast } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import { getRecommendList } from './service'
+import { LoginDao } from './service'
+import CTitle from '@/components/CTitle'
 import './index.scss'
 
 // #region 书写注意
@@ -41,34 +41,6 @@ interface Index {
   props: IProps;
 }
 
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch({
-      type: 'counter/ADD',
-      payload: {}
-    })
-  },
-  add2 (payload) {
-    dispatch({
-      type: 'counter/ADD2',
-      payload
-    })
-  },
-  dec () {
-    dispatch({
-      type: 'counter/MINUS',
-      payload: {}
-    })
-  },
-  asyncAdd () {
-    dispatch({
-      type: 'counter/asyncAdd',
-      payload: {}
-    })
-  }
-}))
 class Index extends Component {
 
   /**
@@ -79,12 +51,15 @@ class Index extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
   */
   config: Config = {
-    navigationBarTitleText: '登录'
+    navigationBarTitleText: '注册'
   }
 
   state = {
-    cellphone: '',
-    password: ''
+    phone: '',
+    password: '',
+    showLoading: false,
+    showTip: false,
+    tip: ''
   }
 
   componentWillReceiveProps (nextProps) {
@@ -92,9 +67,6 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    getRecommendList().then(res => {
-      console.log(res)
-    })
   }
 
   componentWillUnmount () { }
@@ -103,39 +75,105 @@ class Index extends Component {
 
   componentDidHide () { }
 
-  handleChange(e) {
-    console.log(e)
+  handleChange (type: 'phone' | 'password', value) {
+    if (type === 'phone') {
+        this.setState({
+            phone: value
+        })
+    } else {
+        this.setState({
+            password: value
+        })
+    }
   }
 
   onSubmit() {
-
+    const { phone, password } = this.state
+      if (!phone) {
+        this.setState({
+            showTip: true,
+            tip: '请输入手机号'
+        })
+        return
+      }
+      if (!password) {
+        this.setState({
+            showTip: true,
+            tip: '请输入密码'
+        })
+        return
+      }
+      this.setState({
+          showLoading: true
+      })
+      LoginDao(phone, password).then((res) => {
+          const { code } = res.data
+          let tip = '登录成功'
+          if (code !== 200) {
+            tip = res.data.msg || '登录失败'
+          }
+          this.setState({
+            showLoading: false,
+            showTip: true,
+            tip
+          })
+          if (code === 200) {
+            Taro.setStorageSync('userInfo', res.data)
+            Taro.setStorageSync('userId', res.data.account.id)
+            Taro.navigateTo({
+              url: '/pages/index/index'
+            })
+          }
+      }).catch(() => {
+        this.setState({
+          showLoading: false,
+          showTip: true,
+          tip: '登录失败'
+        })
+      })
   }
 
+  closeToast() {
+    this.setState({
+      showTip: false,
+    })
+  }
+  closeLoading() {
+    this.setState({
+      showLoading: false,
+    })
+  }
   render () {
-    let { cellphone, password, } = this.state
+    let { phone, password, showLoading, showTip, tip } = this.state
     return (
       <View className='root'>
+        <CTitle isFixed={false} />
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >
-          <AtInput
-            clear
-            name='cellphone'
-            title='手机号'
-            type='number'
-            placeholder='请输入手机号'
-            value={cellphone}
-            onChange={this.handleChange.bind(this)}
-          />
-          <AtInput
-            clear
-            name='password'
-            title='密码'
-            type='password'
-            placeholder='密码不能少于6位数'
-            value={password}
-            onChange={this.handleChange.bind(this)}
-          />
+          <View className='login_content__item'>
+            <AtIcon value='iphone' size='24' color='#ccc'></AtIcon>
+            <AtInput
+              clear
+              name='phone'
+              type='number'
+              placeholder='手机号'
+              value={phone}
+              onChange={(val) => this.handleChange('phone', val)}
+            />
+          </View>
+          <View className='login_content__item'>
+            <AtIcon value='lock' size='24' color='#ccc'></AtIcon>
+            <AtInput
+              clear
+              name='password'
+              type='password'
+              placeholder='密码'
+              value={password}
+              onChange={(val) => this.handleChange('password', val)}
+            />
+          </View>
+
           <View className='form_btn'>
             <AtButton type='primary' circle formType='submit'>登录</AtButton>
           </View>
@@ -143,7 +181,8 @@ class Index extends Component {
             <Text className='form_reset_text'>重设密码</Text>
           </View>
         </AtForm>
-
+        <AtToast isOpened={showLoading} text='登录中' status='loading' hasMask duration={30000000} onClose={this.closeLoading.bind(this)}></AtToast>
+        <AtToast isOpened={showTip} text={tip} hasMask duration={2000} onClose={this.closeToast.bind(this)}></AtToast>
       </View>
     )
   }

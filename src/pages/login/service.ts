@@ -1,8 +1,12 @@
 import API from '@/services/api'
 
 // 获取推荐歌单
-export function getRecommendList() {
+export function LoginDao(phone: string, password: string) {
   return API.get({
-    url: '/personalized'
+    url: '/login/cellphone',
+    data: {
+      phone,
+      password
+    }
   })
 }

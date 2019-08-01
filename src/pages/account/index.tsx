@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text, Image } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtButton, AtList, AtListItem, AtFloatLayout, } from 'taro-ui'
 
@@ -109,7 +109,7 @@ class Index extends Component<IProps, PageState> {
     this.setState({
       show: false
     })
-    Taro.redirectTo({
+    Taro.navigateTo({
       url: '/pages/login/index'
     })
   }
@@ -118,7 +118,7 @@ class Index extends Component<IProps, PageState> {
     this.setState({
       show: false
     })
-    Taro.redirectTo({
+    Taro.navigateTo({
       url: '/pages/register/index'
     })
   }
