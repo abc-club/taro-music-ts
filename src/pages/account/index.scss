@@ -1,5 +1,10 @@
 @import '../../assets/styles/theme.scss';
 .root {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
   background-color: $bg-color;
   .wrapper{
     background-color: $bg-color-sub;
@@ -88,7 +93,7 @@
   .logout-wrapper{
     text-align: center;
     color: $brand-color;
-    padding: 10px 0;
+    padding: 24px;
   }
   .at-float-layout__container{
     height: 100%;
