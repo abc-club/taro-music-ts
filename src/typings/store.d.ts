@@ -14,6 +14,27 @@ interface Event {
   }
 }
 
+interface UserInfo {
+  account: {
+    id: number
+  },
+  profile: {
+    avatarUrl: string,
+    backgroundUrl: string,
+    nickname: string,
+    eventCount: number,
+    follows: number,
+    followeds: number
+  }
+}
+
+interface ListItemInfo {
+  coverImgUrl: string,
+  name: string,
+  trackCount: number,
+  playCount: number
+}
+
 interface Artist {
   name: string,
   id: number,

@@ -1,11 +1,6 @@
 @import '../../assets/styles/theme.scss';
 .root {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background-color: $bg-color;
+
   .wrapper{
     background-color: $bg-color-sub;
     margin-bottom: $h-spacing-20;

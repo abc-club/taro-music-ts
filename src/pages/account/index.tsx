@@ -5,7 +5,9 @@ import { connect } from '@tarojs/redux'
 import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag } from 'taro-ui'
 
 // import { add, minus, asyncAdd } from '../../actions/counter'
-import { getUserDetailDao, doDailySigninDao, doLogoutDao, } from './service'
+import { doDailySigninDao, doLogoutDao, } from './service'
+import { getUserDetailDao } from '@/services'
+import { showToDoToast } from '@/utils'
 import './index.scss'
 
 // #region 书写注意
@@ -35,19 +37,7 @@ type PageOwnProps = {}
 
 type PageState = {
   show: boolean
-  userInfo: {
-    account: {
-      id: number
-    },
-    profile: {
-      avatarUrl: string,
-      backgroundUrl: string,
-      nickname: string,
-      eventCount: number,
-      follows: number,
-      followeds: number
-    }
-  }
+  userInfo: UserInfo
   userDetail: {
     userLevel?: number
     dailySignin?: boolean,
@@ -199,13 +189,6 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
-  showToast() {
-    Taro.showToast({
-      title: '暂未实现，敬请期待',
-      icon: 'none'
-    })
-  }
-
   render () {
     const { show, userInfo, userDetail, } = this.state
 
@@ -259,7 +242,7 @@ class Index extends Component<IProps, PageState> {
                   <Text className='profile_wrapper_follow_item_title'>粉丝</Text>
                   <Text className='user_count__sub--num'>{userInfo.profile.followeds}</Text>
                 </View>
-                <View className='user_count__sub' onClick={this.showToast.bind(this)}>
+                <View className='user_count__sub' onClick={showToDoToast}>
                   <View className='icon iconfont icon-pan_icon'></View>
                   <Text className='profile_wrapper_follow_item_title'>我的资料</Text>
                 </View>

@@ -1,9 +1,12 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
+import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag, AtAccordion } from 'taro-ui'
 import { connect } from '@tarojs/redux'
+import { getUserDetailDao } from '@/services'
+import { getPlayListDao } from './service'
+import { showToDoToast } from '@/utils'
 
-// import { add, minus, asyncAdd } from '../../actions/counter'
 
 import './index.scss'
 
@@ -18,21 +21,24 @@ import './index.scss'
 // #endregion
 
 type PageStateProps = {
-  counter: {
-    num: number
+  my: {
+    recentPlay: []
   }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  add2: (payload) => void
-  dec: () => void
-  asyncAdd: () => any
+  asyncGetRecentPlayAction: (payload) => void
 }
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  isCreateOpen: boolean
+  isFavOpen: boolean
+  userInfo: UserInfo
+  userCreateList: Array<ListItemInfo>,
+  userCollectList: Array<ListItemInfo>
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
@@ -40,45 +46,38 @@ interface Index {
   props: IProps;
 }
 
-@connect(({ counter }) => ({
-  counter
+@connect(({ my }) => ({
+  my
 }), (dispatch) => ({
-  add () {
+  asyncGetRecentPlayAction (payload) {
     dispatch({
-      type: 'counter/ADD',
-      payload: {}
-    })
-  },
-  add2 (payload) {
-    dispatch({
-      type: 'counter/ADD2',
+      type: 'my/asyncGetRecentPlayAction',
       payload
     })
   },
-  dec () {
-    dispatch({
-      type: 'counter/MINUS',
-      payload: {}
-    })
-  },
-  asyncAdd () {
-    dispatch({
-      type: 'counter/asyncAdd',
-      payload: {}
-    })
-  }
 }))
-class Index extends Component {
+class Index extends Component<IProps, PageState> {
 
-    /**
+  /**
    * 指定config的类型声明为: Taro.Config
    *
    * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
-    config: Config = {
+  */
+  config: Config = {
     navigationBarTitleText: '首页'
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isCreateOpen: true,
+      isFavOpen: true,
+      userInfo: Taro.getStorageSync('userInfo'),
+      userCreateList: [],
+      userCollectList: []
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -87,20 +86,122 @@ class Index extends Component {
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    if (!this.state.userInfo) return
+    this.getPlayList()
+    this.asyncGetRecentPlay()
+  }
+
+  getPlayList() {
+    const { id } = this.state.userInfo.account
+    getPlayListDao(id).then((res) => {
+      if (res.playlist && res.playlist.length > 0) {
+        this.setState({
+          userCreateList: res.playlist.filter(item => item.userId === id),
+          userCollectList: res.playlist.filter(item => item.userId !== id),
+        })
+      }
+    })
+  }
+
+  asyncGetRecentPlay() {
+    const { id } = this.state.userInfo.account
+    this.props.asyncGetRecentPlayAction({ uid: id })
+  }
 
   componentDidHide () { }
 
+  handleCreateOpenClick() {
+    this.setState({
+      isCreateOpen: !this.state.isCreateOpen,
+    })
+  }
+
+  handleisFavOpClick() {
+    this.setState({
+      isFavOpen: !this.state.isFavOpen,
+    })
+  }
   render () {
+    const { userCreateList, userCollectList, } = this.state
+    const { recentPlay, } = this.props.my
     return (
-      <View className='index'>
-        <View className='icon iconfont icon-05'></View>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='add_btn' onClick={this.props.add2.bind(this, {num: 10})}>+10</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+      <View >
+        <View className='wrapper'>
+          <AtList hasBorder={false}>
+            <AtListItem
+              title='本地音乐'
+              extraText='0'
+              arrow='right'
+              iconInfo={{value: 'icon iconfont icon-yinle', size: 22, color: '#d43c33'}}
+              onClick={showToDoToast}
+            />
+            <AtListItem
+              title='最近播放'
+              arrow='right'
+              extraText={String(recentPlay.length)}
+              iconInfo={{value: 'icon iconfont icon-bofang', size: 22, color: '#d43c33'}}
+            />
+            <AtListItem
+              title='我的电台'
+              arrow='right'
+              iconInfo={{value: 'icon iconfont icon-CN_doubanFM', size: 22, color: '#d43c33'}}
+            />
+            <AtListItem
+              title='我的收藏'
+              arrow='right'
+              iconInfo={{value: 'icon iconfont icon-wodeshoucang', size: 22, color: '#d43c33'}}
+            />
+          </AtList>
+
+          <AtAccordion
+            open={this.state.isCreateOpen}
+            onClick={this.handleCreateOpenClick.bind(this)}
+            title='我创建的歌单'
+            icon={{ value: 'heart', color: '#d43c33', size: '15' }}
+          >
+            <AtList hasBorder={false}>
+            {
+              userCreateList.map((item, index) => {
+                let note = item.trackCount + '首, 播放' + (item.playCount < 10000 ? item.playCount : `${(item.playCount/10000).toFixed(1)}万`)+'次'
+                return (
+                  <AtListItem
+                    key={item.name+index}
+                    title={item.name}
+                    note={note}
+                    arrow='right'
+                    thumb={item.coverImgUrl}
+                  />
+                )
+              })
+            }
+            </AtList>
+          </AtAccordion>
+          <AtAccordion
+            open={this.state.isFavOpen}
+            onClick={this.handleisFavOpClick.bind(this)}
+            title='我收藏的歌单'
+            icon={{ value: 'star', color: '#d43c33', size: '15' }}
+          >
+            <AtList hasBorder={false}>
+            {
+              userCollectList.map((item, index) => {
+                let note = item.trackCount + '首, 播放' + (item.playCount < 10000 ? item.playCount : `${(item.playCount/10000).toFixed(1)}万`)+'次'
+                return (
+                  <AtListItem
+                    key={item.name+index}
+                    title={item.name}
+                    note={note}
+                    arrow='right'
+                    thumb={item.coverImgUrl}
+                  />
+                )
+              })
+            }
+            </AtList>
+          </AtAccordion>
+        </View>
+
       </View>
     )
   }
@@ -113,4 +214,4 @@ class Index extends Component {
 //
 // #endregion
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+export default Index
