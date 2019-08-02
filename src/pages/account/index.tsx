@@ -180,7 +180,22 @@ class Index extends Component<IProps, PageState> {
   // 签到
   doDailySignin() {
     doDailySigninDao().then(res => {
-      console.log(res)
+      if (res.code === 200) {
+        Taro.showToast({
+          title: `签到成功，获得${res.point}积分`,
+          icon: 'success'
+        })
+      } else {
+        Taro.showToast({
+          title: '已经签到过了哦~',
+          icon: 'none'
+        })
+      }
+    }, ()=>{
+      Taro.showToast({
+        title: '已经签到过了哦~',
+        icon: 'none'
+      })
     })
   }
 
@@ -225,7 +240,7 @@ class Index extends Component<IProps, PageState> {
                 }
                 {
                   userDetail.dailySignin && (
-                    <View className='header__checkin'>
+                    <View className='header__checkin' onClick={this.doDailySignin.bind(this)}>
                       已签到
                     </View>
                   )
