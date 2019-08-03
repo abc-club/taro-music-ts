@@ -133,6 +133,13 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
+
+  goDetail(item) {
+    Taro.navigateTo({
+      url: `/pages/playList/index?id=${item.id}&name=${item.name}`
+    })
+  }
+
   render () {
     const { userCreateList, userCollectList, userInfo, } = this.state
     const { recentPlay, } = this.props.my
@@ -189,6 +196,7 @@ class Index extends Component<IProps, PageState> {
                     note={note}
                     arrow='right'
                     thumb={item.coverImgUrl}
+                    onClick={this.goDetail.bind(this, item)}
                   />
                 )
               })
@@ -212,6 +220,7 @@ class Index extends Component<IProps, PageState> {
                     note={note}
                     arrow='right'
                     thumb={item.coverImgUrl}
+                    onClick={this.goDetail.bind(this, item)}
                   />
                 )
               })

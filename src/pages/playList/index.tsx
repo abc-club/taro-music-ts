@@ -97,7 +97,7 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
-  goSubscribers() {
+  goUserList() {
     const { playList, } = this.state
     Taro.setStorageSync('userList', (playList as PlayList).subscribers)
     Taro.navigateTo({
@@ -109,7 +109,7 @@ class Index extends Component<IProps, PageState> {
     const { playList, } = this.state
     if (!playList) return
     return (
-      <View className='subscribers' onClick={this.goSubscribers.bind(this)}>
+      <View className='subscribers' onClick={this.goUserList.bind(this)}>
         <View className='avatars'>
           {
             playList.subscribers.slice(0,5).map((item, index) => {
@@ -180,7 +180,11 @@ class Index extends Component<IProps, PageState> {
             简介：{playList.description || '暂无'}
           </View>
         </View>
-
+        <View className='play-wrapper'>
+          <View className='icon iconfont icon-bofang'></View>
+          <Text className='left-text'>播放全部</Text>
+          <Text className='left-text-sub'>(共{playList.tracks.length}首)</Text>
+        </View>
         <View className='song-list'>
           {
             playList.tracks.map((song, index) => {

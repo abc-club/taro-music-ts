@@ -131,5 +131,24 @@
     }
   }
 }
+.play-wrapper{
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  display:flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  opacity: 1;
+  .icon-bofang{
+    font-size: 40px;
+    margin-right: 20px;
+  }
+  .left-text-sub{
+    color: $color-font-sub;
+    font-size: $font-size-28;
+  }
+
+}
 
 
