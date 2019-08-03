@@ -282,9 +282,12 @@ class Index extends Component<IProps, PageState> {
           </AtList>
         </View>
 
-        <View className='wrapper logout-wrapper'>
-          <Text onClick={this.logOut.bind(this)}>退出登录</Text>
-        </View>
+        {
+          userInfo &&
+          <View className='wrapper logout-wrapper'>
+            <Text onClick={this.logOut.bind(this)}>退出登录</Text>
+          </View>
+        }
         <AtFloatLayout isOpened={show} onClose={this.handleClose.bind(this)}>
           <View className='iconfont icon-baseline-close-px icon-close' onClick={this.handleClose.bind(this)}></View>
           <View className='layout_img_wrapper'>

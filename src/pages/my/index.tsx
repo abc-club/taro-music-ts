@@ -1,7 +1,7 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag, AtAccordion } from 'taro-ui'
+import { AtButton, AtList, AtListItem, AtFloatLayout, AtAvatar,AtTag, AtAccordion, AtNoticebar, } from 'taro-ui'
 import { connect } from '@tarojs/redux'
 import { getUserDetailDao } from '@/services'
 import { getPlayListDao } from './service'
@@ -22,7 +22,7 @@ import './index.scss'
 
 type PageStateProps = {
   my: {
-    recentPlay: []
+    recentPlay: Array<Song>
   }
 }
 
@@ -87,6 +87,9 @@ class Index extends Component<IProps, PageState> {
   componentWillUnmount () { }
 
   componentDidShow () {
+    this.setState({
+      userInfo: Taro.getStorageSync('userInfo')
+    })
     if (!this.state.userInfo) return
     this.getPlayList()
     this.asyncGetRecentPlay()
@@ -122,11 +125,24 @@ class Index extends Component<IProps, PageState> {
       isFavOpen: !this.state.isFavOpen,
     })
   }
+
+  jumpPage(name) {
+    Taro.navigateTo({
+      url: `/pages/${name}/index`
+    })
+  }
+
   render () {
-    const { userCreateList, userCollectList, } = this.state
+    const { userCreateList, userCollectList, userInfo, } = this.state
     const { recentPlay, } = this.props.my
     return (
       <View >
+        {
+          !userInfo &&
+          <AtNoticebar icon='volume-plus' close single showMore moreText='去登录' onGotoMore={this.jumpPage.bind(this, 'login')}>
+            还没有登录，去登录吧~
+          </AtNoticebar>
+        }
         <View className='wrapper'>
           <AtList hasBorder={false}>
             <AtListItem
@@ -141,6 +157,7 @@ class Index extends Component<IProps, PageState> {
               arrow='right'
               extraText={String(recentPlay.length)}
               iconInfo={{value: 'icon iconfont icon-bofang', size: 22, color: '#d43c33'}}
+              onClick={this.jumpPage.bind(this, 'recentPlay')}
             />
             <AtListItem
               title='我的电台'

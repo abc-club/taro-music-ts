@@ -12,7 +12,7 @@ type Props = {
 type jsonDetail = {
   msg: string
   event?: Event
-  song: Song
+  song: Song2
 }
 
 export default class CUserListItem extends Component<Props, {}> {

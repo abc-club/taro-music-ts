@@ -1,6 +1,7 @@
 @import '../../assets/styles/theme.scss';
 
 .item{
+  position: relative;
   margin: 0 20px;
   padding: 20px 0;
   border-top: $color-border 1PX solid;
@@ -33,7 +34,11 @@
   .right{
     position: absolute;
     right: 30px;
-    top: 20px;
+    top: 40px;
+    .icon-more{
+      font-size: 40px;
+      color:$color-font-sub;
+    }
   }
 
 }

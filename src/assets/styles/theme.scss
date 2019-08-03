@@ -3,9 +3,14 @@ $hd: 2px; // 基本单位
 $brand-color: #d43c33;
 $bg-color: #eeeff1;
 $bg-color-sub: #fff;
-$color-font: #414141;
-$color-font-sub: #e1e1e1;
+$color-font: #000;
+$color-font-sub: #999;
 $color-font-active: #5c799f;
+$color-border: #d6e4ef;
+
+
+$font-size-28: 14 * $hd;
+$font-size-32: 16 * $hd;
 
 $font-size-14: 7 * $hd;
 $font-size-16: 8 * $hd;
@@ -13,7 +18,6 @@ $font-size-20: 10 * $hd;
 $font-size-22: 11 * $hd;
 $font-size-24: 12 * $hd;
 $font-size-26: 13 * $hd;
-$font-size-28: 14 * $hd;
 $font-size-30: 15 * $hd;
 $font-size-34: 17 * $hd;
 $font-size-36: 18 * $hd;

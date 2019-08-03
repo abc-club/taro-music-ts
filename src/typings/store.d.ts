@@ -41,12 +41,29 @@ interface Artist {
   picUrl: string,
 }
 
+// 缩写的字段
 interface Song {
+  name: string,
+  id: number,
+  alia: Array<string>,
+  ar: Array<Artist>,
+  al: Album
+}
+
+interface Song2 {
   name: string,
   id: number,
   alias: Array<string>,
   artists: Array<Artist>,
   album: Album
+}
+
+
+
+interface RecentPlaySong {
+  playCount: number
+  score: number
+  song: Song
 }
 
 interface Album {

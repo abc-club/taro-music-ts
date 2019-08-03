@@ -37,6 +37,7 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/my/index',
+      'pages/recentPlay/index',
       'pages/account/index',
       'pages/index/index',
       'pages/myEvents/index',

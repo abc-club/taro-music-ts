@@ -1,0 +1,37 @@
+@import '../../assets/styles/theme.scss';
+
+.at-tabs__header{
+  background-color: $brand-color;
+  color: #fff;
+}
+.at-tabs__item,.at-tabs__item--active {
+  color: #fff;
+}
+.at-tabs__item-underline{
+  background-color:  #fff;
+  height: 8px !important;
+  width: 60px !important;
+  bottom: 10px;
+  left: 94px;
+  border-radius: 12px;
+}
+.no-record{
+  padding: 20px;
+  color: $color-font-sub;
+  text-align: center;
+}
+.play-wrapper{
+  display:flex;
+  align-items: center;
+  padding: 20px;
+  .icon-bofang{
+    font-size: 40px;
+    margin-right: 20px;
+  }
+  .left-text-sub{
+    color: $color-font-sub;
+    font-size: $font-size-28;
+  }
+
+}
+
