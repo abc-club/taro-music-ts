@@ -16,5 +16,52 @@
   border-radius: 12px;
 }
 
-
+.recommend_playlist {
+  padding: 40px;
+  overflow: hidden;
+  .recommend_playlist__title {
+      margin-bottom: 30px;
+  }
+  .recommend_playlist__content {
+      .recommend_playlist__item {
+          position: relative;
+          width: 32%;
+          float: left;
+          margin-bottom: 30px;
+          &:nth-child(3n-1) {
+              margin: 0 2% 30px 2%;
+          }
+          .recommend_playlist__item__cover__num {
+              font-size: 20px;
+              position: absolute;
+              right: 10px;
+              top: 0;
+              font-weight: 700;
+              z-index: 3;
+              display: flex;
+              align-items: center;
+              color: #fff;
+              .at-icon-sound {
+                  margin-right: 10px;
+              }
+          }
+          .recommend_playlist__item__cover {
+              display: block;
+              width: 100%;
+              height: 200px;
+              border-radius: 12px;
+          }
+          .recommend_playlist__item__title {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              font-size: 26px;
+              margin-top: 10px;
+              height: 72px;
+          }
+      }
+  }
+}
 
