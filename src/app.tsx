@@ -7,9 +7,10 @@ import models from './models/index'
 import Index from './pages/index'
 import '@/utils/moment'
 
+
+import './assets/fonts/iconfont.css'
 import 'taro-ui/dist/style/index.scss'
 import './app.scss'
-import './assets/fonts/iconfont.css'
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：

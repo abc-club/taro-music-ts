@@ -4,6 +4,7 @@ import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 import CSong from '@/components/CSong'
+import SongDetailLayout from '@/containers/SongDetailLayout'
 
 import './index.scss'
 
@@ -30,7 +31,9 @@ type PageDispatchProps = {
 type PageOwnProps = {}
 
 type PageState = {
-  current: number
+  current: number,
+  isLayoutOpened: boolean
+  selectSong: Song | null
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -55,6 +58,8 @@ class Index extends Component<IProps, PageState> {
     super(...arguments)
     this.state = {
       current: 0,
+      isLayoutOpened: false,
+      selectSong: null,
     }
   }
 
@@ -71,6 +76,19 @@ class Index extends Component<IProps, PageState> {
   handleClick (value) {
     this.setState({
       current: value
+    })
+  }
+
+  onRightClick(song) {
+    this.setState({
+      isLayoutOpened: true,
+      selectSong: song
+    })
+  }
+
+  closeLayout() {
+    this.setState({
+      isLayoutOpened: false,
     })
   }
 
@@ -92,7 +110,7 @@ class Index extends Component<IProps, PageState> {
           {
             recentPlay.map((item, index) => {
               return (
-                <CSong song={item.song} key={item.song.name+index}/>
+                <CSong song={item.song} key={item.song.name+index} onRightClick={this.onRightClick.bind(this)}/>
               )
             })
           }
@@ -102,20 +120,24 @@ class Index extends Component<IProps, PageState> {
   }
 
   render () {
+    const {isLayoutOpened, selectSong} = this.state
     const {recentPlay} = this.props.my
     const tabList = [{ title: '歌曲 ' + (recentPlay.length>0 ? recentPlay.length:'') }, { title: '视频' }, { title: '其他' }]
     return (
-      <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-        <AtTabsPane current={this.state.current} index={0} >
-          { this.renderRecentPlaySong() }
-        </AtTabsPane>
-        <AtTabsPane current={this.state.current} index={1}>
-          <View className='no-record'>暂无播放记录</View>
-        </AtTabsPane>
-        <AtTabsPane current={this.state.current} index={1}>
-          <View className='no-record'>暂无播放记录</View>
-        </AtTabsPane>
-      </AtTabs>
+      <View>
+        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+          <AtTabsPane current={this.state.current} index={0} >
+            { this.renderRecentPlaySong() }
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={1}>
+            <View className='no-record'>暂无播放记录</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={1}>
+            <View className='no-record'>暂无播放记录</View>
+          </AtTabsPane>
+        </AtTabs>
+        <SongDetailLayout isOpened={isLayoutOpened} song={selectSong as Song} handleClose={this.closeLayout.bind(this)}></SongDetailLayout>
+      </View>
     )
   }
 }

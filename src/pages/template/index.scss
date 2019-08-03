@@ -1,0 +1,20 @@
+@import '../../assets/styles/theme.scss';
+
+.at-tabs__header{
+  background-color: $brand-color;
+  color: #fff;
+}
+.at-tabs__item,.at-tabs__item--active {
+  color: #fff;
+}
+.at-tabs__item-underline{
+  background-color:  #fff;
+  height: 8px !important;
+  width: 60px !important;
+  bottom: 10px;
+  left: 160px;
+  border-radius: 12px;
+}
+
+
+

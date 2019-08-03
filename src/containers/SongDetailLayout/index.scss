@@ -1,0 +1,28 @@
+@import '../../assets/styles/theme.scss';
+
+
+.at-float-layout__container, .layout-header{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.layout-body{
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.item{
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1PX solid $color-border;
+  &:last-child {
+    border-bottom: 0PX;
+  }
+  .icon{
+    font-size: 40px;
+    color: $brand-color;
+  }
+  .text{
+    font-size: 30px;
+    margin-left: 20px;
+  }
+}
