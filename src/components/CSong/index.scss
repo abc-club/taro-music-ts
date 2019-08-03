@@ -1,0 +1,39 @@
+@import '../../assets/styles/theme.scss';
+
+.item{
+  margin: 0 20px;
+  padding: 20px 0;
+  border-top: $color-border 1PX solid;
+  .name{
+    font-size: $font-size-32;
+    color: $color-font;
+    margin-bottom: 10px;
+  }
+  .desc{
+    display: flex;
+    align-items: center;
+    font-size: $font-size-28;
+    color: $color-font-sub;
+    .tag{
+      color: $brand-color;
+      padding: 2px 12px;
+      border: $brand-color 1PX solid;
+      font-size: $font-size-16;
+      border-radius: 12px;
+      margin-bottom:2px;
+    }
+    .text{
+      margin-top: 2px;
+      margin-left: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .right{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+  }
+
+}
