@@ -75,3 +75,21 @@ interface Album {
   artist: Artist,
   artists: Array<Artist>
 }
+
+interface PlayList {
+  coverImgUrl: string
+  name: string
+  playCount: number
+  tags: string[],
+  creator: {
+    avatarUrl: string
+    nickname: string
+  },
+  tracks: Song[],
+  description: string,
+  subscribedCount: number,
+  subscribers: Array<{
+    name: string
+    avatarUrl: string
+  }>
+}

@@ -39,8 +39,10 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/my/index',
+      'pages/playList/index',
       'pages/recentPlay/index',
       'pages/account/index',
+      'pages/userList/index',
       'pages/myEvents/index',
       'pages/myFans/index',
       'pages/myFocus/index',

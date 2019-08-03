@@ -89,10 +89,11 @@ class Index extends Component<IProps, PageState> {
   componentDidShow () {
     this.setState({
       userInfo: Taro.getStorageSync('userInfo')
+    }, () => {
+      if (!this.state.userInfo) return
+      this.getPlayList()
+      this.asyncGetRecentPlay()
     })
-    if (!this.state.userInfo) return
-    this.getPlayList()
-    this.asyncGetRecentPlay()
   }
 
   getPlayList() {

@@ -125,6 +125,12 @@ class Index extends Component<IProps, PageState> {
       })
     })
   }
+
+  goDetail(item) {
+    Taro.navigateTo({
+      url: `/pages/playList/index?id=${item.id}&name=${item.name}`
+    })
+  }
   render () {
     const tabList = [{ title: '个性推荐' }, { title: '主播电台' }]
     const { recommendPlayList, recommendDj, recommendNewSong, recommend, } = this.state
