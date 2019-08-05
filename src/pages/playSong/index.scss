@@ -111,7 +111,7 @@
   .song__time{
     width: 650px;
     position: absolute;
-    bottom: 160px;
+    bottom: 200px;
     left: 50px;
     display: flex;
     align-items: center;
@@ -127,7 +127,7 @@
       width: 100px;
       text-align: right;
     }
-    .at-slider{
+    slider{
       box-sizing: border-box;
       width: 650px;
       padding: 0 80px;

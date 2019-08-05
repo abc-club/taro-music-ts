@@ -96,9 +96,6 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
-    console.log('this.props.song.currentSongInfo.name', this.props.song.currentSongInfo.name)
-    console.log('nextProps.song.currentSongInfo.name', nextProps.song.currentSongInfo.name)
     this.setStar(nextProps.song.likeMusicList, nextProps.song.currentSongInfo.id)
     if (this.props.song.currentSongInfo.name !== nextProps.song.currentSongInfo.name || this.state.firstEnter) {
       this.setState({
@@ -172,17 +169,15 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
       id
     })
     backgroundAudioManager.onPause(() => {
-      that.setState({
-        isPlaying: false
-      })
-      clearInterval(timer)
+      this.onPause()
     })
     backgroundAudioManager.onPlay(() => {
       that.setState({
         isPlaying: true
       })
       timer = setInterval(() =>{
-        this.setState({
+      if (!this.state.isPlaying) return
+      this.setState({
           currentyTime: backgroundAudioManager.currentTime
         })
         this.updateLrc(backgroundAudioManager.currentTime)
@@ -202,7 +197,12 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
     // })
   }
 
-
+  onPause() {
+    clearInterval(timer)
+    this.setState({
+      isPlaying: false
+    })
+  }
 
   updateLrc(currentPosition) {
     const { lrc } = this.state
@@ -227,7 +227,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   percentChange(e) {
-    // console.log(e)
+    this.onPause()
     const { value } = e.detail
     const { dt } = this.props.song.currentSongInfo
     let currentPosition = Math.floor((dt / 1000) * value / 100)
@@ -236,6 +236,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   percentChanging() {
+    this.onPause()
     backgroundAudioManager.pause()
   }
 
@@ -431,7 +432,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
         </View>
         <View className='song__time'>
           <Text className='time-left'>{timeLengthFormator(currentyTime*1000)}</Text>
-          <AtSlider step={0.01} value={playPercent} activeColor='#d43c33' blockColor='#fff' blockSize={15} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)}></AtSlider>
+          <Slider step={0.01} value={playPercent} activeColor='#d43c33' blockColor='#fff' blockSize={24} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)}></Slider>
           <Text className='time-right'>{timeLengthFormator(currentSongInfo.dt)}</Text>
         </View>
         {/* <CSlider percent={playPercent} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)} /> */}
