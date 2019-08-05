@@ -47,7 +47,11 @@ interface Song {
   id: number,
   alia: Array<string>,
   ar: Array<Artist>,
-  al: Album
+  al: Album,
+  dt: number, // 总时长，ms
+  st: number, // 是否喜欢 0/1
+  copyright: number,
+  current?: boolean // 当前播放
 }
 
 interface Song2 {
@@ -91,5 +95,32 @@ interface PlayList {
   subscribers: Array<{
     name: string
     avatarUrl: string
+  }>
+}
+
+interface PlaySong {
+  // 可播放歌曲列表
+  canPlayList: Array<Song>,
+  // 是否正在播放
+  isPlaying: boolean,
+  // 当前播放的歌曲id
+  currentSongId: string,
+  // 当前播放的歌曲详情
+  currentSongInfo: Song,
+  // 当前播放的歌曲在播放列表中的索引,默认第一首
+  currentSongIndex: number,
+  // 播放模式
+  playMode: 'loop' | 'one' | 'shuffle',
+  // 喜欢列表
+  recentTab: number
+}
+
+interface Lrc {
+  scroll: boolean,
+  nolyric: boolean,
+  uncollected: boolean,
+  lrclist: Array<{
+    lrc_text: string,
+    lrc_sec: number
   }>
 }

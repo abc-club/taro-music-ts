@@ -36,7 +36,7 @@ export default class CSong extends Component<Props, {}> {
         <View className='left'>
           <Text className='name'>{song.name}</Text>
           <View className='desc'>
-            { song. && <Text className='tag'>SQ</Text>}
+            <Text className='tag'>SQ</Text>
             <Text className='text'>{song.ar[0].name + ' - ' +song.al.name}</Text>
           </View>
         </View>

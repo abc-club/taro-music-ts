@@ -1,8 +1,8 @@
 Arguments: 
-  /Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin/node /Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin/yarn add @/assets/fonts/iconfont.css --silent --no-progress
+  /Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin/node /Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin/yarn audit --json
 
 PATH: 
-  /Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/isaacho/Documents/program/taro-music-ts/node_modules/.bin:/Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/isaacho/Documents/program/taro-music-ts/node_modules/.bin:/Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin:/usr/local/mongodb/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:/usr/local/Cellar/mongodb/4.0.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mongodb/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:/usr/local/Cellar/mongodb/4.0.1/bin:/Users/isaacho/Documents/Android/tools:/Users/isaacho/Documents/Android/platform-tools:/Users/isaacho/Documents/Android/build-tools:.:/Users/isaacho/Documents/Android/tools:/Users/isaacho/Documents/Android/platform-tools:/Users/isaacho/Documents/Android/build-tools:.
+  /Users/isaacho/.tnvm/versions/alinode/v3.11.4/bin:/usr/local/mongodb/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:/usr/local/Cellar/mongodb/4.0.1/bin:/Users/isaacho/.nvm/versions/node/v8.12.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/isaacho/Documents/Android/tools:/Users/isaacho/Documents/Android/platform-tools:/Users/isaacho/Documents/Android/build-tools:.
 
 Yarn version: 
   1.16.0
@@ -14,17 +14,14 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: http://r.cnpmjs.org/@%2fassets/fonts/iconfont.css: [not_found] document not found
-      at Request.params.callback [as _callback] (/Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/yarn/lib/cli.js:66091:18)
-      at Request.self.callback (/Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/yarn/lib/cli.js:129590:22)
-      at emitTwo (events.js:126:13)
-      at Request.emit (events.js:214:7)
-      at Request.<anonymous> (/Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/yarn/lib/cli.js:130562:10)
-      at emitOne (events.js:116:13)
-      at Request.emit (events.js:211:7)
-      at Gunzip.<anonymous> (/Users/isaacho/.tnvm/versions/alinode/v3.11.4/lib/node_modules/yarn/lib/cli.js:130484:12)
+  Error: socket hang up
+      at TLSSocket.onHangUp (_tls_wrap.js:1137:19)
       at Object.onceWrapper (events.js:313:30)
       at emitNone (events.js:111:20)
+      at TLSSocket.emit (events.js:208:7)
+      at endReadableNT (_stream_readable.js:1064:12)
+      at _combinedTickCallback (internal/process/next_tick.js:138:11)
+      at process._tickCallback (internal/process/next_tick.js:180:9)
 
 npm manifest: 
   {
@@ -63,6 +60,7 @@ npm manifest:
       "dva-core": "^1.4.0",
       "dva-loading": "^3.0.12",
       "dva-model-extend": "^0.1.2",
+      "moment": "^2.24.0",
       "nerv-devtools": "^1.4.0-beta.5",
       "nervjs": "^1.4.0-beta.5",
       "redux": "^4.0.0",

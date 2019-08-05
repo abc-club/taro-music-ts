@@ -37,6 +37,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/playSong/index',
       'pages/index/index',
       'pages/my/index',
       'pages/playList/index',
@@ -80,7 +81,8 @@ class App extends Component {
           selectedIconPath: 'assets/images/icon_component_HL.png',
         }
       ]
-    }
+    },
+    requiredBackgroundModes: ["audio"]
   }
 
   componentDidMount () {}

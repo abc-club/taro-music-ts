@@ -20,3 +20,39 @@ export function getRecentPlayDao(uid: number) {
     }
   })
 }
+
+export function getSongDetailDao(id: number) {
+  return API.get({
+    url: '/song/detail',
+    data: {
+      ids: id,
+    }
+  })
+}
+
+export function getSongUrlDao(id: number) {
+  return API.get({
+    url: '/song/url',
+    data: {
+      id,
+    }
+  })
+}
+
+export function getLyricDao(id: number) {
+  return API.get({
+    url: '/lyric',
+    data: {
+      id,
+    }
+  })
+}
+
+export function getLikelistDao(uid: number) {
+  return API.get({
+    url: '/likelist',
+    data: {
+      uid,
+    }
+  })
+}
