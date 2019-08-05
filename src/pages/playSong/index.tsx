@@ -435,7 +435,14 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
           <Slider step={0.01} value={playPercent} activeColor='#d43c33' blockColor='#fff' blockSize={24} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)}></Slider>
           <Text className='time-right'>{timeLengthFormator(currentSongInfo.dt)}</Text>
         </View>
-        {/* <CSlider percent={playPercent} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)} /> */}
+        {lrc.lrclist.length>0 && <View className='active-lyric'>{lrc.lrclist[lrcIndex].lrc_text}</View>}
+        <View className='tools'>
+          <View className='icon iconfont icon-xin'></View>
+          <View className='icon iconfont icon-icon--'></View>
+          <View className='icon iconfont icon-zhuanjiguangpan'></View>
+          <View className='icon iconfont icon-pinglun'></View>
+          <View className='icon iconfont icon-gengduo'></View>
+        </View>
         <CLyric lrc={lrc} lrcIndex={lrcIndex} showLyric={showLyric} onTrigger={() => this.hiddenLyric()} />
         <View className='song__bottom'>
           <View className='song__operation'>

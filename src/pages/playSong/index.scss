@@ -108,10 +108,28 @@
       }
     }
   }
+
+  .active-lyric{
+    text-align: center;
+    color: #fff;
+  }
+  .tools{
+    position: absolute;
+    bottom: 230px;
+    width: 550px;
+    display: flex;
+    padding: 40px 100px;
+    align-items: center;
+    justify-content: space-between;
+    .icon{
+      color: #fff;
+      font-size: 52px;
+    }
+  }
   .song__time{
     width: 650px;
     position: absolute;
-    bottom: 200px;
+    bottom: 160px;
     left: 50px;
     display: flex;
     align-items: center;
