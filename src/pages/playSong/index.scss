@@ -121,9 +121,16 @@
     padding: 40px 100px;
     align-items: center;
     justify-content: space-between;
+    &.hidden {
+      display: none;
+    }
     .icon{
       color: #fff;
       font-size: 52px;
+    }
+    .img{
+      width: 80px;
+      height: 80px;
     }
   }
   .song__time{
@@ -189,6 +196,12 @@
         position: absolute;
         right: 40px;
         top: 14px;
+      }
+      .icon-chukou{
+        position: absolute;
+        right: 50px;
+        font-size: 60px;
+        color: #fff;
       }
     }
   }

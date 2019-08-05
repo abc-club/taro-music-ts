@@ -19,7 +19,7 @@ type PageDispatchProps = {
   getSongInfo: (object) => any,
   // changePlayMode: (object) => any,
   getLikeMusicList: (object) => any,
-  // likeMusic: (object) => any,
+  likeMusic: (object) => any,
   // updatePlayStatus: (object) => any
 }
 
@@ -57,7 +57,12 @@ const backgroundAudioManager = Taro.getBackgroundAudioManager()
       payload
     })
   },
-
+  likeMusic (payload) {
+    dispatch({
+      type: 'song/doLikeMusicAction',
+      payload
+    })
+  },
 }))
 
 class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
@@ -365,15 +370,15 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   likeMusic() {
-    // const { star } = this.state
-    // const { id } = this.props.song.currentSongInfo
-    // this.props.likeMusic({
-    //   like: !star,
-    //   id
-    // })
-    // this.setState({
-    //   switchStar: true
-    // })
+    const { star } = this.state
+    const { id } = this.props.song.currentSongInfo
+    this.props.likeMusic({
+      like: !star,
+      id
+    })
+    this.setState({
+      switchStar: true
+    })
   }
 
   render () {
@@ -430,18 +435,28 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
             </View>
           </View>
         </View>
-        <View className='song__time'>
-          <Text className='time-left'>{timeLengthFormator(currentyTime*1000)}</Text>
-          <Slider step={0.01} value={playPercent} activeColor='#d43c33' blockColor='#fff' blockSize={24} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)}></Slider>
-          <Text className='time-right'>{timeLengthFormator(currentSongInfo.dt)}</Text>
-        </View>
-        {lrc.lrclist.length>0 && <View className='active-lyric'>{lrc.lrclist[lrcIndex].lrc_text}</View>}
-        <View className='tools'>
-          <View className='icon iconfont icon-xin'></View>
+        {!showLyric&&lrc.lrclist.length>0 && <View className='active-lyric'>{lrc.lrclist[lrcIndex].lrc_text}</View>}
+        <View className={
+          classnames({
+            tools: true,
+            hidden: showLyric
+          })
+        }>
+          <Image
+              src={star ? require('../../assets/images/song/play_icn_loved.png') : require('../../assets/images/song/play_icn_love.png')}
+              className='img'
+              onClick={this.likeMusic.bind(this)}
+            />
           <View className='icon iconfont icon-icon--'></View>
           <View className='icon iconfont icon-zhuanjiguangpan'></View>
           <View className='icon iconfont icon-pinglun'></View>
           <View className='icon iconfont icon-gengduo'></View>
+        </View>
+
+        <View className='song__time'>
+          <Text className='time-left'>{timeLengthFormator(currentyTime*1000)}</Text>
+          <Slider step={0.01} value={playPercent} activeColor='#d43c33' blockColor='#fff' blockSize={24} onChange={this.percentChange.bind(this)} onChanging={this.percentChanging.bind(this)}></Slider>
+          <Text className='time-right'>{timeLengthFormator(currentSongInfo.dt)}</Text>
         </View>
         <CLyric lrc={lrc} lrcIndex={lrcIndex} showLyric={showLyric} onTrigger={() => this.hiddenLyric()} />
         <View className='song__bottom'>
@@ -465,11 +480,13 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
               className='song__operation__next'
               onClick={this.getNextSong.bind(this)}
             />
-            <Image
+            <View className='icon iconfont icon-chukou'></View>
+
+            {/* <Image
               src={star ? require('../../assets/images/song/play_icn_loved.png') : require('../../assets/images/song/play_icn_love.png')}
               className='song__operation__like'
               onClick={this.likeMusic.bind(this)}
-            />
+            /> */}
           </View>
         </View>
       </View>

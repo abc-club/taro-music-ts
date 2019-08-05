@@ -56,3 +56,13 @@ export function getLikelistDao(uid: number) {
     }
   })
 }
+
+export function doLikeMusicDao(id:number, like:boolean) {
+  return API.get({
+    url: '/like',
+    data: {
+      id,
+      like
+    }
+  })
+}
