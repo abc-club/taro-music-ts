@@ -49,6 +49,7 @@ class App extends Component {
       'pages/myFocus/index',
       'pages/login/index',
       'pages/register/index',
+      'pages/webview/index',
     ],
     window: {
       backgroundTextStyle: 'light',

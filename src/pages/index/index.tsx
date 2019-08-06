@@ -1,9 +1,9 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text, Image, } from '@tarojs/components'
+import { View, Button, Text, Image, Swiper, SwiperItem,} from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtTabs, AtTabsPane } from 'taro-ui'
-import { getRecommendPlayListDao, getRecommendDjDao, getRecommendNewSongDao, getRecommendDao,} from './services'
+import { AtTabs, AtTabsPane, } from 'taro-ui'
+import { getRecommendPlayListDao, getRecommendDjDao, getRecommendNewSongDao, getRecommendDao, getBannerDao,} from './services'
 // import { add, minus, asyncAdd } from '../../actions/counter'
 
 import './index.scss'
@@ -43,7 +43,8 @@ type PageState = {
     name: string,
     picUrl: string
   }>,
-  recommend: any
+  recommend: any,
+  banners: Array<Banner>
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -70,6 +71,7 @@ class Index extends Component<IProps, PageState> {
       recommendDj: [],
       recommendNewSong: [],
       recommend: [],
+      banners: [],
     }
   }
 
@@ -80,6 +82,7 @@ class Index extends Component<IProps, PageState> {
   componentWillUnmount () { }
 
   componentDidShow () {
+    this.getBanner()
     this.getRecommendPlayList()
     this.getRecommendDj()
     this.getRecommendNewSong()
@@ -91,6 +94,14 @@ class Index extends Component<IProps, PageState> {
   handleClick (value) {
     this.setState({
       current: value
+    })
+  }
+
+  getBanner() {
+    getBannerDao().then(res=> {
+      this.setState({
+        banners: res.banners
+      })
     })
   }
 
@@ -126,6 +137,26 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
+  clickBanner(banner: Banner) {
+    switch(banner.targetType) {
+      case 1:
+        Taro.navigateTo({
+          url: `/pages/playSong/index?id=${banner.targetId}`
+        })
+        break
+        case 10:
+          Taro.navigateTo({
+            url: `/pages/playList/index?id=${banner.targetId}&name=${banner.typeTitle}`
+          })
+          break
+        case 3000:
+          Taro.navigateTo({
+            url: `/pages/webview/index?name=${banner.typeTitle}&url=${banner.url}`
+          })
+          break
+    }
+  }
+
   goDetail(item) {
     Taro.navigateTo({
       url: `/pages/playList/index?id=${item.id}&name=${item.name}`
@@ -133,10 +164,27 @@ class Index extends Component<IProps, PageState> {
   }
   render () {
     const tabList = [{ title: '个性推荐' }, { title: '主播电台' }]
-    const { recommendPlayList, recommendDj, recommendNewSong, recommend, } = this.state
+    const { recommendPlayList, recommendDj, recommendNewSong, banners, } = this.state
     return (
       <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
         <AtTabsPane current={this.state.current} index={0} >
+        <Swiper
+          className='test-h'
+          indicatorColor='#999'
+          indicatorActiveColor='#333'
+          circular
+          indicatorDots
+          autoplay>
+          {
+            banners.map((item) => {
+              return (
+                <SwiperItem key={item.targetId} onClick={this.clickBanner.bind(this,item)}>
+                  <Image className='img' src={item.pic}/>
+                </SwiperItem>
+              )
+            })
+          }
+        </Swiper>
         <View className='recommend_playlist'>
           <View className='recommend_playlist__title'>
             推荐歌单

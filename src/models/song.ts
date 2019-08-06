@@ -57,7 +57,11 @@ export default modelExtend(model, {
     updateCurrentSong(state, {payload}) {
       const { currentSongInfo } = payload
       let currentSongIndex = state.canPlayList.findIndex(item => item.id === currentSongInfo.id)
-      state.canPlayList.map((item, index) => {
+      let canPlayList = state.canPlayList
+      if (currentSongIndex<0) {
+        canPlayList.unshift(currentSongInfo)
+      }
+      canPlayList.map((item, index) => {
         item.current = false
         if (currentSongIndex === index) {
           item.current = true
@@ -68,7 +72,7 @@ export default modelExtend(model, {
         ...state,
         currentSongInfo,
         currentSongIndex,
-        canPlayList: state.canPlayList
+        canPlayList
       }
     },
     setLikeMusic(state, {payload}) {

@@ -27,3 +27,10 @@ export function getRecommendDao() {
     url: '/personalized/recommend',
   })
 }
+
+// 获取banner
+export function getBannerDao() {
+  return API.get({
+    url: '/banner?type=2',
+  })
+}

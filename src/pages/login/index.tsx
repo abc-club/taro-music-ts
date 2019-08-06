@@ -55,8 +55,8 @@ class Index extends Component {
   }
 
   state = {
-    phone: '15800021731',
-    password: 'ao201001',
+    phone: '',
+    password: '',
     showLoading: false,
     showTip: false,
     tip: ''
