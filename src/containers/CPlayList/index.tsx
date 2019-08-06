@@ -50,7 +50,7 @@ class CPlayList extends Component {
     let result = canPlayList.map((item, index) => {
       const cls = classnames({
         playlist: true,
-        active: item.name === currentSongInfo.name
+        active: item.current
       })
       return (
         <View className={cls} key={item.name} onClick={this.doPlaySong.bind(this,item)}>

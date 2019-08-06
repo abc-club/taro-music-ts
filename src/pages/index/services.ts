@@ -34,3 +34,10 @@ export function getBannerDao() {
     url: '/banner?type=2',
   })
 }
+
+// 获取每日推荐
+export function getRecommendSongsDao() {
+  return API.get({
+    url: '/recommend/songs',
+  })
+}

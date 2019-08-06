@@ -3,9 +3,8 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text, Image, Swiper, SwiperItem,} from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtTabs, AtTabsPane, } from 'taro-ui'
-import { getRecommendPlayListDao, getRecommendDjDao, getRecommendNewSongDao, getRecommendDao, getBannerDao,} from './services'
-// import { add, minus, asyncAdd } from '../../actions/counter'
-
+import { getRecommendPlayListDao, getRecommendDjDao, getBannerDao, getRecommendSongsDao,} from './services'
+import CMusic from '@/components/CMusic'
 import './index.scss'
 
 // #region 书写注意
@@ -19,11 +18,11 @@ import './index.scss'
 // #endregion
 
 type PageStateProps = {
-
+  song: PlaySong
 }
 
 type PageDispatchProps = {
-
+  updateState: (payload)=> void
 }
 
 type PageOwnProps = {}
@@ -39,7 +38,7 @@ type PageState = {
     name: string,
     picUrl: string
   }>,
-  recommendNewSong: Array<{
+  recommendSongs: Array<{
     name: string,
     picUrl: string
   }>,
@@ -49,7 +48,18 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-
+@connect(({
+  song
+}) => ({
+  song: song
+}), (dispatch) => ({
+  updateState(payload) {
+    dispatch({
+      type: 'song/updateState',
+      payload
+    })
+  },
+}))
 class Index extends Component<IProps, PageState> {
 
   /**
@@ -69,7 +79,7 @@ class Index extends Component<IProps, PageState> {
       current: 0,
       recommendPlayList: [],
       recommendDj: [],
-      recommendNewSong: [],
+      recommendSongs: [],
       recommend: [],
       banners: [],
     }
@@ -85,8 +95,7 @@ class Index extends Component<IProps, PageState> {
     this.getBanner()
     this.getRecommendPlayList()
     this.getRecommendDj()
-    this.getRecommendNewSong()
-    this.getRecommend()
+    this.getRecommendSongs()
   }
 
   componentDidHide () { }
@@ -121,18 +130,10 @@ class Index extends Component<IProps, PageState> {
     })
   }
 
-  getRecommendNewSong() {
-    getRecommendNewSongDao().then(res=> {
+  getRecommendSongs() {
+    getRecommendSongsDao().then(res=> {
       this.setState({
-        recommendNewSong: res.result
-      })
-    })
-  }
-
-  getRecommend() {
-    getRecommendDao().then(res=> {
-      this.setState({
-        recommend: res.result
+        recommendSongs: res.result
       })
     })
   }
@@ -164,90 +165,78 @@ class Index extends Component<IProps, PageState> {
   }
   render () {
     const tabList = [{ title: '个性推荐' }, { title: '主播电台' }]
-    const { recommendPlayList, recommendDj, recommendNewSong, banners, } = this.state
+    const { recommendPlayList, recommendDj, banners, } = this.state
     return (
-      <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-        <AtTabsPane current={this.state.current} index={0} >
-        <Swiper
-          className='test-h'
-          indicatorColor='#999'
-          indicatorActiveColor='#333'
-          circular
-          indicatorDots
-          autoplay>
-          {
-            banners.map((item) => {
-              return (
-                <SwiperItem key={item.targetId} onClick={this.clickBanner.bind(this,item)}>
-                  <Image className='img' src={item.pic}/>
-                </SwiperItem>
-              )
-            })
-          }
-        </Swiper>
-        <View className='recommend_playlist'>
-          <View className='recommend_playlist__title'>
-            推荐歌单
-          </View>
-          <View className='recommend_playlist__content'>
+      <View>
+        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+          <AtTabsPane current={this.state.current} index={0} >
+          <Swiper
+            className='test-h'
+            indicatorColor='#999'
+            indicatorActiveColor='#333'
+            circular
+            indicatorDots
+            autoplay>
             {
-              recommendPlayList.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
-                <Image
-                  src={item.picUrl}
-                  className='recommend_playlist__item__cover'
-                />
-                <View className='recommend_playlist__item__cover__num'>
-                  <Text className='at-icon at-icon-sound'></Text>
-                  {
-                    item.playCount < 10000 ?
-                    item.playCount :
-                    `${Number(item.playCount/10000).toFixed(0)}万`
-                  }
-                </View>
-                <View className='recommend_playlist__item__title'>{item.name}</View>
-              </View>)
+              banners.map((item) => {
+                return (
+                  <SwiperItem key={item.targetId} onClick={this.clickBanner.bind(this,item)}>
+                    <Image className='img' src={item.pic}/>
+                  </SwiperItem>
+                )
+              })
             }
-          </View>
-        </View>
-
-        <View className='recommend_playlist'>
-          <View className='recommend_playlist__title'>
-            最新音乐
-          </View>
-          <View className='recommend_playlist__content'>
-            {
-              recommendNewSong.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
-                <Image
-                  src={item.picUrl}
-                  className='recommend_playlist__item__cover'
-                />
-                <View className='recommend_playlist__item__title'>{item.name}</View>
-              </View>)
-            }
-          </View>
-        </View>
-
-        </AtTabsPane>
-
-        <AtTabsPane current={this.state.current} index={1}>
+          </Swiper>
           <View className='recommend_playlist'>
             <View className='recommend_playlist__title'>
-              主播电台
+              推荐歌单
             </View>
             <View className='recommend_playlist__content'>
               {
-                recommendDj.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
+                recommendPlayList.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
                   <Image
                     src={item.picUrl}
                     className='recommend_playlist__item__cover'
                   />
+                  <View className='recommend_playlist__item__cover__num'>
+                    <Text className='at-icon at-icon-sound'></Text>
+                    {
+                      item.playCount < 10000 ?
+                      item.playCount :
+                      `${Number(item.playCount/10000).toFixed(0)}万`
+                    }
+                  </View>
                   <View className='recommend_playlist__item__title'>{item.name}</View>
                 </View>)
               }
             </View>
           </View>
-        </AtTabsPane>
-      </AtTabs>
+
+
+          </AtTabsPane>
+
+          <AtTabsPane current={this.state.current} index={1}>
+            <View className='recommend_playlist'>
+              <View className='recommend_playlist__title'>
+                主播电台
+              </View>
+              <View className='recommend_playlist__content'>
+                {
+                  recommendDj.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
+                    <Image
+                      src={item.picUrl}
+                      className='recommend_playlist__item__cover'
+                    />
+                    <View className='recommend_playlist__item__title'>{item.name}</View>
+                  </View>)
+                }
+              </View>
+            </View>
+          </AtTabsPane>
+        </AtTabs>
+        <CMusic songInfo={ this.props.song } onUpdatePlayStatus={this.props.updateState.bind(this)} />
+
+      </View>
     )
   }
 }
