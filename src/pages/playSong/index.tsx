@@ -151,6 +151,24 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   componentWillMount() {
+    let that = this
+    // fix 点击同一首歌重新播放bug
+    Taro.getBackgroundAudioPlayerState({
+      success(res) {
+        if (res.status !== 2) {
+          that.setState({
+            isPlaying: true,
+          })
+          timer = setInterval(() =>{
+            that.setState({
+                currentyTime: backgroundAudioManager.currentTime
+              })
+              that.updateLrc(backgroundAudioManager.currentTime)
+              that.updateProgress(backgroundAudioManager.currentTime)
+            }, 300)
+        }
+      }
+    })
     this.getLikeList()
   }
 
@@ -186,6 +204,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
     this.props.getSongInfo({
       id
     })
+
     backgroundAudioManager.onPause(() => {
       this.onPause()
     })
@@ -194,20 +213,20 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
         isPlaying: true
       })
       timer = setInterval(() =>{
-      if (!this.state.isPlaying) return
-      this.setState({
-          currentyTime: backgroundAudioManager.currentTime
-        })
-        this.updateLrc(backgroundAudioManager.currentTime)
-        this.updateProgress(backgroundAudioManager.currentTime)
-      }, 300)
-    })
+        if (!this.state.isPlaying) return
+        this.setState({
+            currentyTime: backgroundAudioManager.currentTime
+          })
+          this.updateLrc(backgroundAudioManager.currentTime)
+          this.updateProgress(backgroundAudioManager.currentTime)
+        }, 300)
+      })
     backgroundAudioManager.onEnded(() => {
       const { playMode } = this.props.song
       const routes = Taro.getCurrentPages()
       const currentRoute = routes[routes.length - 1].route
       // 如果在当前页面则直接调用下一首的逻辑，反之则触发nextSong事件
-      if (currentRoute === 'pages/songDetail/index') {
+      if (currentRoute === 'pages/playSong/index') {
         this.playByMode(playMode)
       } else {
         Taro.eventCenter.trigger('nextSong')
@@ -412,8 +431,13 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
       return
     }
     playSingle({song})
-    Taro.redirectTo({
-      url: `/pages/playSong/index?id=${song.id}`
+    const { canPlayList, } = this.props.song
+    const currentSongIndex = canPlayList.findIndex(item => item.id === song.id)
+    this.props.getSongInfo({
+      id: canPlayList[currentSongIndex].id
+    })
+    this.setState({
+      isOpened: false,
     })
   }
 

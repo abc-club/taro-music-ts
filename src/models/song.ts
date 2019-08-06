@@ -38,7 +38,7 @@ export default modelExtend(model, {
         ...songDetail.songs[0],
         ...{url: songUrl.data[0].url, lrcInfo: { lrclist: lrc.now_lrc, scroll: lrc.scroll ? 1 : 0 }}
       }
-      yield put({ type: 'updateState', payload: { currentSongInfo: songInfo }})
+      yield put({ type: 'updateCurrentSong', payload: { currentSongInfo: songInfo }})
     },
     *getLikelistAction({ payload }, { call, put }) {
       const { id } = payload
@@ -54,6 +54,23 @@ export default modelExtend(model, {
     },
   },
   reducers: {
+    updateCurrentSong(state, {payload}) {
+      const { currentSongInfo } = payload
+      let currentSongIndex = state.canPlayList.findIndex(item => item.id === currentSongInfo.id)
+      state.canPlayList.map((item, index) => {
+        item.current = false
+        if (currentSongIndex === index) {
+          item.current = true
+        }
+        return item
+      })
+      return {
+        ...state,
+        currentSongInfo,
+        currentSongIndex,
+        canPlayList: state.canPlayList
+      }
+    },
     setLikeMusic(state, {payload}) {
       const { like, id } = payload
       let list: Array<number> = []
