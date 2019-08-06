@@ -1,3 +1,4 @@
+import Taro from '@tarojs/taro'
 import modelExtend from 'dva-model-extend'
 import { model } from './uitls'
 import { getSongDetailDao, getSongUrlDao, getLyricDao, getLikelistDao, doLikeMusicDao, } from '@/services'
@@ -66,6 +67,57 @@ export default modelExtend(model, {
       return {
         ...state,
         likeMusicList: list
+      }
+    },
+    // 播放单曲
+    playSingle(state, {payload}) {
+      const {song} = payload
+      let currentSongIndex = state.canPlayList.findIndex(item => item.id === song.id)
+      if (currentSongIndex > -1) {
+        return {
+          ...state,
+          currentSongIndex
+        }
+      } else {
+        let canPlayList = state.canPlayList
+        canPlayList.unshift(song)
+        return {
+          ...state,
+          canPlayList,
+          currentSongIndex: 0,
+        }
+      }
+    },
+    playAll(state, {payload}) {
+      const {list} = payload
+      const tempList = list.map((item) => {
+        let temp: any = {}
+        // 兼容接口
+        if (item.song) {
+          temp.name = item.song.name
+          temp.id = item.song.id
+          temp.ar = item.song.ar
+          temp.al = item.song.al
+          temp.copyright = item.song.copyright
+          temp.st = item.song.st
+        } else {
+          temp.name = item.name
+          temp.id = item.id
+          temp.ar = item.ar
+          temp.al = item.al
+          temp.copyright = item.copyright
+          temp.st = item.st
+        }
+        return temp
+      })
+      const canPlayList = tempList.filter((item) => {
+        return item.st !== -200
+      })
+      // let currentSongIndex = list.findIndex(item => item.id === song.id)
+      return {
+        ...state,
+        canPlayList,
+        currentSongIndex: 0,
       }
     }
   }

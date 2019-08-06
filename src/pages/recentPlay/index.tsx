@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtTabs, AtTabsPane } from 'taro-ui'
-import CSong from '@/components/CSong'
+import CSong from '@/containers/CSong'
 import SongDetailLayout from '@/containers/SongDetailLayout'
 
 import './index.scss'

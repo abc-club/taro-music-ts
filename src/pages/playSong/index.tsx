@@ -4,8 +4,7 @@ import { View, Image, Text, Slider } from '@tarojs/components'
 import classnames from 'classnames'
 import { connect } from '@tarojs/redux'
 import CLyric from '../../components/CLyric'
-import { AtSlider } from 'taro-ui'
-// import CSlider from '../../components/CSlider'
+import CPlayList from '@/containers/CPlayList'
 import {timeLengthFormator} from '@/utils'
 import './index.scss'
 
@@ -17,10 +16,10 @@ type PageStateProps = {
 
 type PageDispatchProps = {
   getSongInfo: (object) => any,
-  // changePlayMode: (object) => any,
+  updateState: (object) => any,
   getLikeMusicList: (object) => any,
   likeMusic: (object) => any,
-  // updatePlayStatus: (object) => any
+  playSingle: (object) => void,
 }
 
 
@@ -36,6 +35,7 @@ type PageState = {
   playPercent: number,
   currentyTime: number,
   switchStar: boolean // 是否切换过喜欢状态
+  isOpened: boolean
 }
 
 const backgroundAudioManager = Taro.getBackgroundAudioManager()
@@ -60,6 +60,18 @@ const backgroundAudioManager = Taro.getBackgroundAudioManager()
   likeMusic (payload) {
     dispatch({
       type: 'song/doLikeMusicAction',
+      payload
+    })
+  },
+  updateState(payload) {
+    dispatch({
+      type: 'song/updateState',
+      payload
+    })
+  },
+  playSingle (payload) {
+    dispatch({
+      type: 'song/playSingle',
       payload
     })
   },
@@ -97,6 +109,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
       switchStar: false,
       playPercent: 0,
       currentyTime: 0,
+      isOpened: false,
     }
   }
 
@@ -132,9 +145,9 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
 
   componentWillUnmount () {
     // 更新下播放状态
-    // this.props.updatePlayStatus({
-    //   isPlaying: this.state.isPlaying
-    // })
+    this.props.updateState({
+      isPlaying: this.state.isPlaying
+    })
   }
 
   componentWillMount() {
@@ -168,8 +181,8 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
 
   componentDidMount() {
     const that = this
-    // const { id } = that.$router.params
-    const id = 1341964346
+    const { id } = that.$router.params
+    // const id = 1341964346
     this.props.getSongInfo({
       id
     })
@@ -189,17 +202,17 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
         this.updateProgress(backgroundAudioManager.currentTime)
       }, 300)
     })
-    // backgroundAudioManager.onEnded(() => {
-    //   const { playMode } = this.props.song
-    //   const routes = Taro.getCurrentPages()
-    //   const currentRoute = routes[routes.length - 1].route
-    //   // 如果在当前页面则直接调用下一首的逻辑，反之则触发nextSong事件
-    //   if (currentRoute === 'pages/songDetail/index') {
-    //     this.playByMode(playMode)
-    //   } else {
-    //     Taro.eventCenter.trigger('nextSong')
-    //   }
-    // })
+    backgroundAudioManager.onEnded(() => {
+      const { playMode } = this.props.song
+      const routes = Taro.getCurrentPages()
+      const currentRoute = routes[routes.length - 1].route
+      // 如果在当前页面则直接调用下一首的逻辑，反之则触发nextSong事件
+      if (currentRoute === 'pages/songDetail/index') {
+        this.playByMode(playMode)
+      } else {
+        Taro.eventCenter.trigger('nextSong')
+      }
+    })
   }
 
   onPause() {
@@ -247,19 +260,19 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
 
   // 获取下一首
   getNextSong() {
-    // const { currentSongIndex, canPlayList, playMode } = this.props.song
-    // let nextSongIndex = currentSongIndex + 1
-    // console.log('歌曲详情index', currentSongIndex)
-    // if (playMode === 'shuffle') {
-    //   this.getShuffleSong()
-    //   return
-    // }
-    // if (currentSongIndex === canPlayList.length - 1) {
-    //   nextSongIndex = 0
-    // }
-    // this.props.getSongInfo({
-    //   id: canPlayList[nextSongIndex].id
-    // })
+    const { currentSongIndex, canPlayList, playMode } = this.props.song
+    let nextSongIndex = currentSongIndex + 1
+    console.log('歌曲详情index', currentSongIndex)
+    if (playMode === 'shuffle') {
+      this.getShuffleSong()
+      return
+    }
+    if (currentSongIndex === canPlayList.length - 1) {
+      nextSongIndex = 0
+    }
+    this.props.getSongInfo({
+      id: canPlayList[nextSongIndex].id
+    })
   }
 
   setStar(likeList, id) {
@@ -282,18 +295,18 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
 
   // 获取上一首
   getPrevSong() {
-    // const { currentSongIndex, canPlayList, playMode } = this.props.song
-    // let prevSongIndex = currentSongIndex - 1
-    // if (playMode === 'shuffle') {
-    //   this.getShuffleSong()
-    //   return
-    // }
-    // if (currentSongIndex === 0) {
-    //   prevSongIndex = canPlayList.length - 1
-    // }
-    // this.props.getSongInfo({
-    //   id: canPlayList[prevSongIndex].id
-    // })
+    const { currentSongIndex, canPlayList, playMode } = this.props.song
+    let prevSongIndex = currentSongIndex - 1
+    if (playMode === 'shuffle') {
+      this.getShuffleSong()
+      return
+    }
+    if (currentSongIndex === 0) {
+      prevSongIndex = canPlayList.length - 1
+    }
+    this.props.getSongInfo({
+      id: canPlayList[prevSongIndex].id
+    })
   }
 
   // 循环播放当前歌曲
@@ -335,32 +348,32 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   }
 
   changePlayMode() {
-    // let { playMode } = this.props.song
-    // if (playMode === 'loop') {
-    //   playMode = 'one'
-    //   Taro.showToast({
-    //     title: '单曲循环',
-    //     icon: 'none',
-    //     duration: 2000
-    //   })
-    // } else if (playMode === 'one') {
-    //   playMode = 'shuffle'
-    //   Taro.showToast({
-    //     title: '随机播放',
-    //     icon: 'none',
-    //     duration: 2000
-    //   })
-    // } else {
-    //   playMode = 'loop'
-    //   Taro.showToast({
-    //     title: '列表循环',
-    //     icon: 'none',
-    //     duration: 2000
-    //   })
-    // }
-    // this.props.changePlayMode({
-    //   playMode
-    // })
+    let { playMode } = this.props.song
+    if (playMode === 'loop') {
+      playMode = 'one'
+      Taro.showToast({
+        title: '单曲循环',
+        icon: 'none',
+        duration: 2000
+      })
+    } else if (playMode === 'one') {
+      playMode = 'shuffle'
+      Taro.showToast({
+        title: '随机播放',
+        icon: 'none',
+        duration: 2000
+      })
+    } else {
+      playMode = 'loop'
+      Taro.showToast({
+        title: '列表循环',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+    this.props.updateState({
+      playMode
+    })
   }
 
   hiddenLyric() {
@@ -381,9 +394,32 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
     })
   }
 
+  handleCPlayList() {
+    this.setState({
+      isOpened: !this.state.isOpened
+    })
+  }
+
+  doPlaySong(song) {
+    const { playSingle, } = this.props
+    if (!playSingle) return
+    // 没有权限
+    if (song.st === -200) {
+      Taro.showToast({
+        title: '暂无版权',
+        icon: 'none'
+      })
+      return
+    }
+    playSingle({song})
+    Taro.redirectTo({
+      url: `/pages/playSong/index?id=${song.id}`
+    })
+  }
+
   render () {
     const { currentSongInfo, playMode } = this.props.song
-    const { isPlaying, showLyric, lrc, lrcIndex, star, playPercent, currentyTime, } = this.state
+    const { isPlaying, showLyric, lrc, lrcIndex, star, playPercent, currentyTime, isOpened } = this.state
     let playModeImg = require('../../assets/images/song/icn_loop_mode.png')
     if (playMode === 'one') {
       playModeImg = require('../../assets/images/song/icn_one_mode.png')
@@ -480,15 +516,10 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
               className='song__operation__next'
               onClick={this.getNextSong.bind(this)}
             />
-            <View className='icon iconfont icon-chukou'></View>
-
-            {/* <Image
-              src={star ? require('../../assets/images/song/play_icn_loved.png') : require('../../assets/images/song/play_icn_love.png')}
-              className='song__operation__like'
-              onClick={this.likeMusic.bind(this)}
-            /> */}
+            <View className='icon iconfont icon-chukou' onClick={this.handleCPlayList.bind(this)}></View>
           </View>
         </View>
+        <CPlayList isOpened={isOpened} handleClose={this.handleCPlayList.bind(this)} doPlaySong={this.doPlaySong.bind(this)}/>
       </View>
     )
   }

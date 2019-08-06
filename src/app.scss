@@ -8,3 +8,11 @@
   top: 0;
   background-color: $bg-color;
 }
+.at-float-layout .layout-body{
+  padding-top:0px;
+  padding-bottom:0px;
+}
+.at-float-layout .layout-header, .at-float-layout__container{
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}

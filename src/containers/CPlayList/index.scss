@@ -1,0 +1,32 @@
+@import '../../assets/styles/theme.scss';
+.layout-body{
+  padding-top: 0px;
+}
+.playlist{
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+  border-top: 1PX solid $color-border;
+  .info{
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    .sub-text{
+      font-size: 26px;
+      color: $color-font-sub;
+    }
+  }
+  &.active{
+    .info{
+      color: $brand-color;
+      .sub-text{
+        color: $brand-color;
+      }
+    }
+  }
+  .icon{
+    font-size: 36px;
+    color: $color-font-sub;
+  }
+}

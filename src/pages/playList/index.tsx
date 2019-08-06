@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { AtAvatar, } from 'taro-ui'
-import CSong from '@/components/CSong'
+import CSong from '@/containers/CSong'
 import SongDetailLayout from '@/containers/SongDetailLayout'
 import {getPlayListDetailDao} from './service'
 // import { add, minus, asyncAdd } from '../../actions/counter'
@@ -24,6 +24,7 @@ type PageStateProps = {
 }
 
 type PageDispatchProps = {
+  playAll: (payload) => void
 
 }
 
@@ -37,7 +38,16 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-
+@connect(({
+}) => ({
+}), (dispatch) => ({
+  playAll (payload) {
+    dispatch({
+      type: 'song/playAll',
+      payload
+    })
+  },
+}))
 class Index extends Component<IProps, PageState> {
 
   /**
@@ -102,6 +112,14 @@ class Index extends Component<IProps, PageState> {
     Taro.setStorageSync('userList', (playList as PlayList).subscribers)
     Taro.navigateTo({
       url: '/pages/userList/index?title=收藏者'
+    })
+  }
+
+  playAll() {
+    if (!this.state.playList) return
+    this.props.playAll({list: this.state.playList.tracks})
+    Taro.navigateTo({
+      url: `/pages/playSong/index?id=${this.state.playList.tracks[0].id}`
     })
   }
 
@@ -180,7 +198,7 @@ class Index extends Component<IProps, PageState> {
             简介：{playList.description || '暂无'}
           </View>
         </View>
-        <View className='play-wrapper'>
+        <View className='play-wrapper' onClick={this.playAll.bind(this)}>
           <View className='icon iconfont icon-bofang'></View>
           <Text className='left-text'>播放全部</Text>
           <Text className='left-text-sub'>(共{playList.tracks.length}首)</Text>
