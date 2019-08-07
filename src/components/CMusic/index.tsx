@@ -114,7 +114,9 @@ export default class CMusic extends Component<Props, State> {
           <AtIcon value={isPlaying ? 'pause' : 'play'} size='30' color='#FFF' onClick={this.switchPlayStatus.bind(this)}></AtIcon>
         </View>
         <AtIcon value='playlist' size='28' color='#FFF' className="icon_playlist" onClick={this.showPlayList.bind(this)}></AtIcon>
-        <CPlayList isOpened={isOpened} handleClose={this.closePlayList.bind(this)} doPlaySong={this.doPlaySong.bind(this)}/>
+        {
+          isOpened&&<CPlayList isOpened={isOpened} handleClose={this.closePlayList.bind(this)} doPlaySong={this.doPlaySong.bind(this)}/>
+        }
       </View>
     )
   }
