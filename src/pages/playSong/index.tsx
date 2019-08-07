@@ -200,7 +200,6 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   componentDidMount() {
     const that = this
     const { id } = that.$router.params
-    // const id = 1341964346
     this.props.getSongInfo({
       id
     })
@@ -226,11 +225,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
       const routes = Taro.getCurrentPages()
       const currentRoute = routes[routes.length - 1].route
       // 如果在当前页面则直接调用下一首的逻辑，反之则触发nextSong事件
-      if (currentRoute === 'pages/playSong/index') {
         this.playByMode(playMode)
-      } else {
-        Taro.eventCenter.trigger('nextSong')
-      }
     })
   }
 
@@ -281,7 +276,6 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
   getNextSong() {
     const { currentSongIndex, canPlayList, playMode } = this.props.song
     let nextSongIndex = currentSongIndex + 1
-    console.log('歌曲详情index', currentSongIndex)
     if (playMode === 'shuffle') {
       this.getShuffleSong()
       return
