@@ -1,7 +1,7 @@
 import modelExtend from 'dva-model-extend'
 import { model } from './uitls'
 
-export default modelExtend(model, {
+export default {
   namespace: 'counter',
   state: {
     num: 0,
@@ -30,5 +30,11 @@ export default modelExtend(model, {
         num: state.num - 1
       }
     },
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
   }
-})
+}

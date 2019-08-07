@@ -147,7 +147,6 @@ class Index extends Component {
       <View className='root'>
         <CTitle isFixed={false} />
         <AtForm
-          onSubmit={this.onSubmit.bind(this)}
         >
           <View className='login_content__item'>
             <AtIcon value='iphone' size='24' color='#ccc'></AtIcon>
@@ -173,7 +172,7 @@ class Index extends Component {
           </View>
 
           <View className='form_btn'>
-            <AtButton type='primary' circle formType='submit'>登录</AtButton>
+            <AtButton type='primary' circle onClick={this.onSubmit.bind(this)}>登录</AtButton>
           </View>
           <View className='form_reset'>
             <Text className='form_reset_text'>重设密码</Text>

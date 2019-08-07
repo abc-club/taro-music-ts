@@ -298,7 +298,7 @@ class Index extends Component<IProps, PageState> {
           <View className='layout_img_wrapper'>
             <Image
               className='layout_img'
-              src={require('@/assets/images/cloudmusic.jpeg')}
+              src={require('../../assets/images/cloudmusic.jpeg')}
             />
           </View>
           <View className='form_btn'>

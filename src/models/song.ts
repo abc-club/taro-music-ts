@@ -4,7 +4,7 @@ import { model } from './uitls'
 import { getSongDetailDao, getSongUrlDao, getLyricDao, getLikelistDao, doLikeMusicDao, } from '@/services'
 import {parse_lrc} from '@/utils'
 
-export default modelExtend(model, {
+export default {
   namespace: 'song',
   state: {
     canPlayList: [],
@@ -140,6 +140,12 @@ export default modelExtend(model, {
         canPlayList,
         currentSongIndex: 0,
       }
-    }
+    },
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
   }
-})
+}

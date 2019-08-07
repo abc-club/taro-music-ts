@@ -180,8 +180,8 @@ class Index extends Component<IProps, PageState> {
             {
               banners.map((item) => {
                 return (
-                  <SwiperItem key={item.targetId} onClick={this.clickBanner.bind(this,item)}>
-                    <Image className='img' src={item.pic}/>
+                  <SwiperItem key={item.targetId}>
+                    <Image className='img' src={item.pic} onClick={this.clickBanner.bind(this,item)}/>
                   </SwiperItem>
                 )
               })

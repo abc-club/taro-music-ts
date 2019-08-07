@@ -2,7 +2,7 @@ import modelExtend from 'dva-model-extend'
 import { model } from './uitls'
 import { getRecentPlayDao } from '@/services'
 
-export default modelExtend(model, {
+export default {
   namespace: 'my',
   state: {
     recentPlay: [],
@@ -17,6 +17,11 @@ export default modelExtend(model, {
     }
   },
   reducers: {
-
+    updateState(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
   }
-})
+}
