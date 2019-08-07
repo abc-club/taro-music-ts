@@ -171,8 +171,13 @@ class Index extends Component<IProps, PageState> {
   doDailySignin() {
     doDailySigninDao().then(res => {
       if (res.code === 200) {
+        this.setState({
+          userDetail: { ... this.state.userDetail, ...{
+            dailySignin: true
+          }},
+        })
         Taro.showToast({
-          title: `签到成功，获得${res.point}积分`,
+          title: `获得${res.point}积分`,
           icon: 'success'
         })
       } else {
