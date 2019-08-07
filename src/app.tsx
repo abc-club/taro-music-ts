@@ -59,27 +59,27 @@ class App extends Component {
     },
     tabBar: {
       color: '#7A7E83',
-      selectedColor: '#ab3319',
+      selectedColor: '#c73420',
       borderStyle: 'black',
       backgroundColor: '#ffffff',
       list: [
         {
           text: '发现',
           pagePath: 'pages/index/index',
-          iconPath: 'assets/images/icon_API.png',
-          selectedIconPath: 'assets/images/icon_API_HL.png',
+          iconPath: 'assets/images/music.png',
+          selectedIconPath: 'assets/images/selected-music.png',
         },
         {
           text: '我的',
           pagePath: 'pages/my/index',
-          iconPath: 'assets/images/icon_component.png',
-          selectedIconPath: 'assets/images/icon_component_HL.png',
+          iconPath: 'assets/images/love.png',
+          selectedIconPath: 'assets/images/selected-love.png',
         },
         {
           text: '账号',
           pagePath: 'pages/account/index',
-          iconPath: 'assets/images/icon_component.png',
-          selectedIconPath: 'assets/images/icon_component_HL.png',
+          iconPath: 'assets/images/me.png',
+          selectedIconPath: 'assets/images/selected-me.png',
         }
       ]
     },
