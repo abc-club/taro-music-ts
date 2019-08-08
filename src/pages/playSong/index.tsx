@@ -448,7 +448,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
       <View className='song_container'>
         <Image
           className='song__bg'
-          src={currentSongInfo.al.picUrl}
+          src={currentSongInfo.al.picUrl+'?imageView&thumbnail=368x368'}
         />
         <View className={
           classnames({
@@ -474,7 +474,7 @@ class Page extends Component<PageStateProps & PageDispatchProps, PageState> {
                   circling: true
                 })
               }>
-                <Image className='song__music__main__img__cover' src={currentSongInfo.al.picUrl} />
+                <Image className='song__music__main__img__cover' src={currentSongInfo.al.picUrl+'?imageView&thumbnail=368x368'} />
               </View>
             </View>
           </View>

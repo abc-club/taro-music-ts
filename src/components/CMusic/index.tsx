@@ -100,7 +100,7 @@ export default class CMusic extends Component<Props, State> {
               circling: isPlaying
             })
           }
-          src={currentSongInfo.al.picUrl}
+          src={currentSongInfo.al.picUrl+'?imageView&thumbnail=80x80'}
         />
         <View className="music__info" onClick={this.goDetail.bind(this)}>
           <View className='music__info__name'>

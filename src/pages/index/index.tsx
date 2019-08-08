@@ -181,7 +181,7 @@ class Index extends Component<IProps, PageState> {
               banners.map((item) => {
                 return (
                   <SwiperItem key={item.targetId}>
-                    <Image className='img' src={item.pic} onClick={this.clickBanner.bind(this,item)}/>
+                    <Image className='img' src={item.pic+'?imageView&thumbnail=0x300'} onClick={this.clickBanner.bind(this,item)}/>
                   </SwiperItem>
                 )
               })
@@ -195,7 +195,7 @@ class Index extends Component<IProps, PageState> {
               {
                 recommendPlayList.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
                   <Image
-                    src={item.picUrl}
+                    src={item.picUrl+'?imageView&thumbnail=0x200'}
                     className='recommend_playlist__item__cover'
                   />
                   <View className='recommend_playlist__item__cover__num'>
@@ -224,7 +224,7 @@ class Index extends Component<IProps, PageState> {
                 {
                   recommendDj.map((item, index) => <View key={index} className='recommend_playlist__item' onClick={this.goDetail.bind(this, item)}>
                     <Image
-                      src={item.picUrl}
+                      src={item.picUrl+'?imageView&thumbnail=0x200'}
                       className='recommend_playlist__item__cover'
                     />
                     <View className='recommend_playlist__item__title'>{item.name}</View>

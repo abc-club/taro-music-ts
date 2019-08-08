@@ -155,12 +155,12 @@ class Index extends Component<IProps, PageState> {
         <View className='header'>
           <Image
             className='header__bg'
-            src={playList.coverImgUrl}
+            src={playList.coverImgUrl+'?imageView&thumbnail=252x252'}
           />
           <View className='header__cover'>
             <Image
               className='header__cover__img'
-              src={playList.coverImgUrl}
+              src={playList.coverImgUrl+'?imageView&thumbnail=252x252'}
             />
             <Text className='header__cover__desc'>歌单</Text>
             <View className='header__cover__num'>
@@ -179,7 +179,7 @@ class Index extends Component<IProps, PageState> {
             <View className='header__info__user'>
               <Image
                 className='header__info__user_avatar'
-                src={playList.creator.avatarUrl}
+                src={playList.creator.avatarUrl+'?imageView&thumbnail=60x60'}
               />{playList.creator.nickname}
             </View>
           </View>

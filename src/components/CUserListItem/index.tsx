@@ -23,7 +23,7 @@ export default class CUserListItem extends Component<Props, {}> {
     return (
         <View className='userListItem_components'>
             <Image
-							src={userInfo.avatarUrl}
+							src={userInfo.avatarUrl+'?imageView&thumbnail=100x100'}
 							className='userListItem__avatar'
             />
             <View className='userListItem__info'>
