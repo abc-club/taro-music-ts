@@ -4,9 +4,11 @@
 由taro-cli搭建，搭配typescript和dva使用
 适配微信小程序和h5（由于Taro.getBackgroundAudioManager不兼容h5,目前h5端不能正常播放）
 
+部分代码参考自 https://github.com/lsqy/taro-music
+
 ### 运行
 
-1. 首先启动服务端，接口服务由[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi/#/)提供，下载代码，跑服务，命令如下：
+1. 首先启动服务端，接口服务由[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi/#/)提供，下载代码，启动服务，命令如下：
 ```
 npm i
 npm run start
